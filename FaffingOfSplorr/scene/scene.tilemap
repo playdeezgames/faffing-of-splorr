@@ -1,0 +1,20 @@
+tile_set: "/scene/scene.tilesource"
+layers {
+  id: "terrain"
+  z: 0.0
+  cell {
+    x: 0
+    y: 0
+    tile: 84
+  }
+  cell {
+    x: 39
+    y: 21
+    tile: 84
+  }
+}
+layers {
+  id: "character"
+  z: 0.5
+}
+material: "/builtins/materials/tile_map.material"

@@ -1,0 +1,48 @@
+key_trigger {
+  input: KEY_LEFT
+  action: "LEFT"
+}
+key_trigger {
+  input: KEY_DOWN
+  action: "DOWN"
+}
+key_trigger {
+  input: KEY_RIGHT
+  action: "RIGHT"
+}
+key_trigger {
+  input: KEY_UP
+  action: "UP"
+}
+key_trigger {
+  input: KEY_SPACE
+  action: "GREEN"
+}
+key_trigger {
+  input: KEY_ESC
+  action: "RED"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_DOWN
+  action: "DOWN"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_LEFT
+  action: "LEFT"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_RIGHT
+  action: "RIGHT"
+}
+gamepad_trigger {
+  input: GAMEPAD_LPAD_UP
+  action: "UP"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_DOWN
+  action: "GREEN"
+}
+gamepad_trigger {
+  input: GAMEPAD_RPAD_RIGHT
+  action: "RED"
+}
