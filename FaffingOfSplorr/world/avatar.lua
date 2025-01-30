@@ -33,6 +33,7 @@ function M.get_dialog_choice()
     return get_avatar_data().dialog_choice
 end
 function M.set_dialog_choice(dialog_choice)
+	assert(type(dialog_choice)=="number" or type(dialog_choice)=="nil", "dialog_choice should be a number or nil")
     get_avatar_data().dialog_choice = dialog_choice
 end
 function M.previous_dialog_choice()
