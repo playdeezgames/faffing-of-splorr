@@ -13,9 +13,19 @@ function init(self)
 	world_initializer.initialize()
 end
 
+local function get_cursor_position(character_id)
+	local direction_id = character.get_direction(character_id)
+	if direction_id == nil then return end
+	local room_cell_id = character.get_room_cell(character_id)
+	local column, row = room_cell.get_position(room_cell_id)
+	return directions.get_next_position(direction_id, column, row)
+end
+
 local function update_room(dt)
 	local avatar_character_id = avatar.get_character()
 	local avatar_room_cell_id = character.get_room_cell(avatar_character_id)
+	local cursor_column, cursor_row = get_cursor_position(avatar_character_id)
+
 	local room_id = room_cell.get_room(avatar_room_cell_id)
 	for column = 1, room.get_columns(room_id) do
 		for row = 1, room.get_rows(room_id) do
@@ -31,6 +41,12 @@ local function update_room(dt)
 				tile = character_type.get_tile(character_type_id)
 			end
 			tilemap.set_tile(grimoire.SCENE_TILEMAP_URL, grimoire.LAYER_CHARACTER, column, row, tile)
+
+			tile = 0
+			if cursor_column==column and cursor_row==row then
+				tile = grimoire.TILE_CURSOR
+			end
+			tilemap.set_tile(grimoire.SCENE_TILEMAP_URL, grimoire.LAYER_EFFECT, column, row, tile)
 		end
 	end
 end

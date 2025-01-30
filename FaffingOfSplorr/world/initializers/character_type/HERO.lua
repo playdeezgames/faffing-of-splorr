@@ -14,6 +14,11 @@ local function can_enter(room_cell_id)
 end
 
 local function do_move(character_id, direction_id)
+    local old_direction_id = character.get_direction(character_id)
+    if direction_id ~= old_direction_id then
+        character.set_direction(character_id, direction_id)
+        return
+    end
     local room_cell_id = character.get_room_cell(character_id)
     local column, row = room_cell.get_position(room_cell_id)
     local next_column, next_row = directions.get_next_position(direction_id, column, row)

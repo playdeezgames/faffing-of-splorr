@@ -73,6 +73,16 @@ function M.do_verb(character_id, verb_type_id, context)
     end
 end
 function M.recycle(character_id)
+    assert(type(character_id)=="number", "character_id must be a number.")
     world.data.characters[character_id] = {}
+end
+function M.get_direction(character_id)
+    assert(type(character_id)=="number", "character_id must be a number.")
+    return get_character_data(character_id).direction_id
+end
+function M.set_direction(character_id, direction_id)
+    assert(type(character_id)=="number", "character_id must be a number.")
+    assert(type(direction_id)=="string", "direction_id must be a string.")
+    get_character_data(character_id).direction_id = direction_id
 end
 return M

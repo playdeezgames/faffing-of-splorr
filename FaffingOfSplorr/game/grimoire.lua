@@ -9,6 +9,7 @@ M.TEXT_ROWS = 22
 M.TILE_HERO = 5
 M.TILE_BLANK = 18
 M.TILE_PINE = 85
+M.TILE_CURSOR = 161
 
 M.SCENE_TILEMAP_URL = "/scene#scene"
 M.MESSAGE_TILEMAP_URL = "/message#message"
@@ -17,6 +18,7 @@ M.MESSAGE_URL = "/message"
 M.LAYER_TERRAIN = "terrain"
 M.LAYER_CHARACTER = "character"
 M.LAYER_TEXT = "text"
+M.LAYER_EFFECT = "effect"
 
 M.ACTION_UP = "UP"
 M.ACTION_DOWN = "DOWN"
