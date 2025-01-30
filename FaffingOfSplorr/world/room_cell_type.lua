@@ -1,10 +1,15 @@
 local grimoire = require "game.grimoire"
 local M = {}
 M.BLANK = "BLANK"
+M.PINE = "PINE"
 local data = {
     [M.BLANK] = {
         tile = grimoire.TILE_BLANK,
         blocking = false
+    },
+    [M.PINE] = {
+        tile = grimoire.TILE_PINE,
+        blocking = true
     }
 }
 local function get_descriptor(room_cell_type_id)

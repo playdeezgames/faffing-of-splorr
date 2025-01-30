@@ -8,6 +8,7 @@ M.TEXT_ROWS = 22
 
 M.TILE_HERO = 5
 M.TILE_BLANK = 18
+M.TILE_PINE = 85
 
 M.SCENE_TILEMAP_URL = "/scene#scene"
 M.MESSAGE_TILEMAP_URL = "/message#message"
