@@ -7,6 +7,7 @@ local character_type = require "world.character_type"
 local avatar = require "world.avatar"
 local room_cell_type = require "world.room_cell_type"
 local room_cell = require "world.room_cell"
+local utility = require "game.utility"
 local M = {}
 
 local terrain_table = {
@@ -63,6 +64,9 @@ end
 function M.initialize()
     local room_id = create_room(grimoire.BOARD_COLUMNS, grimoire.BOARD_ROWS)
     spawn_avatar(room_id)
+    utility.send_message(
+        "Welcome to Tree Punchers of SPLORR!!",
+        "<ARROWS> move | <SPACE> action | <ESC> game menu")
 end
 
 return M
