@@ -7,10 +7,7 @@ local function get_character_data(character_id)
     assert(type(character_id)=="number", "character_id must be a number.")
     return world.data.characters[character_id]
 end
-function M.create(character_type_id, room_cell_id)
-    assert(type(character_type_id)=="string", "character_type_id must be a string.")
-    assert(type(room_cell_id)=="number", "room_cell_id must be a number")
-    local character_id = #world.data.characters + 1
+function M.initialize(character_id, character_type_id, room_cell_id)
     world.data.characters[character_id] = {
         character_type_id = character_type_id
     }
@@ -19,6 +16,12 @@ function M.create(character_type_id, room_cell_id)
     if initializer ~= nil then
         initializer(character_id)
     end
+end
+function M.create(character_type_id, room_cell_id)
+    assert(type(character_type_id)=="string", "character_type_id must be a string.")
+    assert(type(room_cell_id)=="number", "room_cell_id must be a number")
+    local character_id = #world.data.characters + 1
+    M.initialize(character_id, character_type_id, room_cell_id)
     return character_id
 end
 function M.get_character_type(character_id)

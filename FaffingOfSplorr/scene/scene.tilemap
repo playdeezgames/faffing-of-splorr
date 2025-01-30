@@ -5,12 +5,12 @@ layers {
   cell {
     x: 0
     y: 0
-    tile: 84
+    tile: 0
   }
   cell {
     x: 39
     y: 21
-    tile: 84
+    tile: 0
   }
 }
 layers {
