@@ -1,5 +1,6 @@
 local world = require "world.world"
 local interaction_type = require "world.interaction_type"
+local character = require "world.character"
 local M = {}
 world.data.avatar = {}
 local function get_avatar_data()
@@ -97,5 +98,8 @@ function M.get_interaction()
 end
 function M.has_interaction()
     return M.get_interaction() ~= nil
+end
+function M.get_position()
+	return character.get_position(M.get_character())
 end
 return M

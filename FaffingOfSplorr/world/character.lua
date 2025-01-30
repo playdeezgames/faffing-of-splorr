@@ -29,6 +29,10 @@ function M.get_room_cell(character_id)
     assert(type(character_id)=="number", "character_id must be a number.")
     return get_character_data(character_id).room_cell_id
 end
+function M.get_position(character_id)
+    assert(type(character_id)=="number", "character_id must be a number.")
+    return room_cell.get_position(M.get_room_cell(character_id))
+end
 function M.set_room_cell(character_id, room_cell_id)
     assert(type(character_id)=="number", "character_id must be a number.")
     assert(type(room_cell_id)=="number", "room_cell_id must be a number")
