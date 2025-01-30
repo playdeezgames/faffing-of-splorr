@@ -1,0 +1,50 @@
+local grimoire = require "game.grimoire"
+
+local message_rows = {}
+
+function init(self)
+end
+
+function update(self, dt)
+    for row = 1, grimoire.TEXT_ROWS do
+        for column = 1, grimoire.TEXT_COLUMNS do
+            local tile = 0
+            if row <= #message_rows then
+                local line = message_rows[row]
+                if column <= #line then
+                    tile = line[column]
+                end
+            end
+            tilemap.set_tile(grimoire.MESSAGE_TILEMAP_URL, grimoire.LAYER_TEXT, column, row, tile)
+        end
+    end
+end
+
+local function add_message_row(row)
+    table.insert(message_rows, 1, row)
+    while #message_rows > grimoire.TEXT_ROWS do
+        table.remove(message_rows, grimoire.TEXT_ROWS + 1)
+    end
+end
+
+local function add_message(text)
+    assert(type(text)=="string", "The text should be a string.")
+    local line = {}
+    for index = 1, #text do
+        local tile = string.byte(text, index) + 1
+        table.insert(line, tile)
+        if #line == grimoire.TEXT_COLUMNS then
+            add_message_row(line)
+            line = {}
+        end
+    end
+    if #line > 0 then
+        add_message_row(line)
+    end
+end
+
+function on_message(self, message_id, message, sender)
+    if message_id == hash(grimoire.MSG_ADD_MESSAGE) then
+        add_message(message.text)
+    end
+end

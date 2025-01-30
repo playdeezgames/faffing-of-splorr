@@ -1,9 +1,9 @@
 local grimoire = require "game.grimoire"
 local M = {}
-M.GRASS = "GRASS"
+M.BLANK = "BLANK"
 local data = {
-    [M.GRASS] = {
-        tile = grimoire.TILE_GRASS,
+    [M.BLANK] = {
+        tile = grimoire.TILE_BLANK,
         blocking = false
     }
 }

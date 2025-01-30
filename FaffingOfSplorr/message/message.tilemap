@@ -1,0 +1,21 @@
+tile_set: "/message/message.tilesource"
+layers {
+  id: "text"
+  z: 0.0
+  cell {
+    x: 0
+    y: 0
+    tile: 64
+  }
+  cell {
+    x: 12
+    y: 11
+    tile: 0
+  }
+  cell {
+    x: 39
+    y: 21
+    tile: 64
+  }
+}
+material: "/builtins/materials/tile_map.material"

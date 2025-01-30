@@ -3,7 +3,7 @@ local M = {}
 M.START = "START"
 local data = {
     [M.START] = {
-        room_cell_type_id = room_cell_type.GRASS
+        room_cell_type_id = room_cell_type.BLANK
     }
 }
 local function get_descriptor(room_type_id)

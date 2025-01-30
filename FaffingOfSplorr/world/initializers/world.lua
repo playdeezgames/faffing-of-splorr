@@ -12,6 +12,7 @@ function M.initialize()
     local room_cell_id = room.get_room_cell(room_id, math.floor(grimoire.BOARD_COLUMNS / 2), math.floor(grimoire.BOARD_ROWS / 2))
     local character_id=character.create(character_type.HERO, room_cell_id)
     avatar.set_character(character_id)
+    msg.post(grimoire.MESSAGE_URL,grimoire.MSG_ADD_MESSAGE,{text="Hello, world!"})
 end
 
 return M
