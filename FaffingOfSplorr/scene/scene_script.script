@@ -92,11 +92,21 @@ local function move_up()
 	move_avatar(directions.NORTH)
 end
 
+local function do_action()
+	print("do_action")
+end
+
+local function do_menu()
+	print("do_menu")
+end
+
 local action_table = {
 	[hash(grimoire.ACTION_DOWN)] = move_down,
 	[hash(grimoire.ACTION_LEFT)] = move_left,
 	[hash(grimoire.ACTION_RIGHT)] = move_right,
-	[hash(grimoire.ACTION_UP)] = move_up
+	[hash(grimoire.ACTION_UP)] = move_up,
+	[hash(grimoire.ACTION_GREEN)] = do_action,
+	[hash(grimoire.ACTION_RED)] = do_menu
 }
 
 local function do_action(action_func)
