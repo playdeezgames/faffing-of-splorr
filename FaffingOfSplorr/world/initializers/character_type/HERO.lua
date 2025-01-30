@@ -32,11 +32,21 @@ local function do_move(character_id, direction_id)
     else
     end
 end
+local function do_action(character_id)
+    print("do an action!")
+end
+local function do_cancel(character_id)
+    print("show me a game menu!")
+end
 character_type.set_verb_doer(
     character_type.HERO,
     function(character_id, verb_type_id, context)
         if verb_type_id == verb_type.MOVE then
             do_move(character_id, context.direction_id)
+        elseif verb_type_id == verb_type.ACTION then
+            do_action(character_id)
+        elseif verb_type_id == verb_type.CANCEL then
+            do_cancel(character_id)
         else
             print(verb_type_id)
         end

@@ -93,11 +93,11 @@ local function move_up()
 end
 
 local function do_action()
-	print("do_action")
+	character.do_verb(avatar.get_character(), verb_type.ACTION, {})
 end
 
 local function do_menu()
-	print("do_menu")
+	character.do_verb(avatar.get_character(), verb_type.CANCEL, {})
 end
 
 local action_table = {
