@@ -43,8 +43,14 @@ local function add_message(text)
     end
 end
 
+local function clear_messages()
+    message_rows = {}
+end
+
 function on_message(self, message_id, message, sender)
     if message_id == hash(grimoire.MSG_ADD_MESSAGE) then
         add_message(message.text)
+    elseif message_id == hash(grimoire.MSG_CLEAR_MESSAGES) then
+        clear_messages()
     end
 end
