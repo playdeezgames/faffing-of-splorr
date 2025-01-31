@@ -48,6 +48,10 @@ function M.set_room_cell(character_id, room_cell_id)
         room_cell.set_character(room_cell_id, character_id)
     end
 end
+function M.get_room(character_id)
+    assert(type(character_id)=="number", "character_id must be a number.")
+    return room_cell.get_room(M.get_room_cell(character_id))
+end
 function M.set_statistic(character_id, statistic_type_id, statistic_value)
     assert(type(character_id)=="number", "character_id must be a number.")
     assert(type(statistic_type_id)=="string", "statistic_type_id must be a string")

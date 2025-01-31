@@ -2,12 +2,17 @@ local grimoire = require "game.grimoire"
 local M = {}
 M.BLANK = "BLANK"
 M.PINE = "PINE"
+M.PUNCHED_PINE = "PUNCHED_PINE"
 local data = {
     [M.BLANK] = {
         tile = grimoire.TILE_BLANK,
         blocking = false
     },
     [M.PINE] = {
+        tile = grimoire.TILE_PINE,
+        blocking = true
+    },
+    [M.PUNCHED_PINE] = {
         tile = grimoire.TILE_PINE,
         blocking = true
     }
