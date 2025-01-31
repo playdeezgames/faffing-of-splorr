@@ -64,6 +64,14 @@ function M.set_statistic(character_id, statistic_type_id, statistic_value)
     character_data.statistics[statistic_type_id] = statistic_value
     return previous_value
 end
+function M.change_statistic(character_id, statistic_type_id, delta)
+    assert(type(character_id)=="number", "character_id must be a number.")
+    assert(type(statistic_type_id)=="string", "statistic_type_id must be a string")
+    assert(type(delta)=="number", "delta must be a number")
+    local new_value = M.get_statistic(character_id, statistic_type_id) + delta
+    M.set_statistic(character_id, statistic_type_id, new_value)
+    return new_value
+end
 function M.get_statistic(character_id, statistic_type_id)
     assert(type(character_id)=="number", "character_id must be a number.")
     assert(type(statistic_type_id)=="string", "statistic_type_id must be a string")

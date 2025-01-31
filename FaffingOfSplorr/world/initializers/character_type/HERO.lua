@@ -6,6 +6,7 @@ local room = require "world.room"
 local directions = require "game.directions"
 local room_cell_type = require "world.room_cell_type"
 local utility = require "game.utility"
+local statistic_type = require "world.statistic_type"
 
 local function can_enter(room_cell_id)
     if room_cell_id == nil then return false end
@@ -39,8 +40,10 @@ local function do_action(character_id)
     local room_id = character.get_room(character_id)
     local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
     local next_room_cell_type_id = room_cell.get_room_cell_type(next_room_cell_id)
+    local punches_thrown = character.change_statistic(character_id, statistic_type.PUNCHES_THROWN, 1)
     if next_room_cell_type_id == room_cell_type.PINE then
-        utility.send_message("You punched that tree!")
+        local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
+        utility.send_message("You punched that tree!", "You have landed "..punches_landed.." of "..punches_thrown.." punches.")
         room_cell.set_room_cell_type(next_room_cell_id, room_cell_type.PUNCHED_PINE)
     elseif next_room_cell_type_id == room_cell_type.PUNCHED_PINE then
         utility.send_message("That tree was already punched!")
@@ -63,5 +66,11 @@ character_type.set_verb_doer(
         else
             print(verb_type_id)
         end
+    end)
+character_type.set_initializer(
+    character_type.HERO, 
+    function(character_id) 
+        character.set_statistic(character_id, statistic_type.PUNCHES_LANDED, 0)
+        character.set_statistic(character_id, statistic_type.PUNCHES_THROWN, 0)
     end)
 return nil
