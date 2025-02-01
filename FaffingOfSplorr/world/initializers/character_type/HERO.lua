@@ -48,46 +48,56 @@ local function do_energy_cost(character_id, cost)
         return true
     end
 end
+local function do_punch_air(character_id)
+    if not do_energy_cost(character_id, 1) then return false end
+    utility.send_message("You punch the air!")
+    return true
+end
+local function do_punch_tree(character_id, feature_id, next_room_cell_id)
+    if not do_energy_cost(character_id, 1) then return false end
+    local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
+    local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
+    utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
+
+    local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
+    if hit_points <= 0 then
+        utility.send_message("You punched that tree into oblivion.")
+        room_cell.set_feature(next_room_cell_id, nil)
+        feature.recycle(feature_id)
+        character.change_statistic(character_id, statistic_type.TREES_MURDERED, 1)
+    else
+        utility.send_message("The tree has "..hit_points.." HP.")
+    end
+
+    local punch_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
+    if punches_landed >= punch_goal then
+        character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, -punch_goal)
+        character.change_statistic(character_id, statistic_type.PUNCH_GOAL, punch_goal)
+        punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
+        utility.send_message("Yer punch is now level "..punch_level.."!")
+    end
+    return true
+end
+local function do_drink_well(character_id)
+    character.set_statistic(character_id, statistic_type.ENERGY, character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY))
+    utility.send_message("Yer energy is refreshed!")
+    return true
+end
 local function do_feature_action(character_id, next_room_cell_id)
     local feature_id = room_cell.get_feature(next_room_cell_id)
-
     if feature_id == nil then
-        if not do_energy_cost(character_id, 1) then return false end
-        utility.send_message("You punch the air!")
-        return true
-    else
-        local feature_type_id = feature.get_feature_type(feature_id)
-        if feature_type_id == feature_type.PINE then
-            if not do_energy_cost(character_id, 1) then return false end
-            local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
-            local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
-            utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
-
-            local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
-            if hit_points <= 0 then
-                utility.send_message("You punched that tree into oblivion.")
-                room_cell.set_feature(next_room_cell_id, nil)
-                feature.recycle(feature_id)
-                character.change_statistic(character_id, statistic_type.TREES_MURDERED, 1)
-            else
-                utility.send_message("The tree has "..hit_points.." HP.")
-            end
-
-            local punch_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
-            if punches_landed >= punch_goal then
-                character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, -punch_goal)
-                character.change_statistic(character_id, statistic_type.PUNCH_GOAL, punch_goal)
-                punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
-                utility.send_message("Yer punch is now level "..punch_level.."!")
-            end
-            return true
-
-        elseif feature_type_id == feature_type.WELL then
-            character.set_statistic(character_id, statistic_type.ENERGY, character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY))
-            utility.send_message("Yer energy is refreshed!")
-            return true
-        end
+        return do_punch_air(character_id)
     end
+
+    local feature_type_id = feature.get_feature_type(feature_id)
+    if feature_type_id == feature_type.PINE then
+        return do_punch_tree(character_id, feature_id, next_room_cell_id)
+    end
+
+    if feature_type_id == feature_type.WELL then
+        return do_drink_well(character_id)
+    end
+    
     return false
 end
 local function do_action(character_id)
