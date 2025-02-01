@@ -30,6 +30,7 @@ local function do_move(character_id, direction_id)
     if can_enter(next_room_cell_id) then
         utility.send_message("Moving "..direction_id..".")
         character.set_room_cell(character_id, next_room_cell_id)
+        character.change_statistic(character_id, statistic_type.MOVES, 1)
     else
     end
 end
@@ -79,5 +80,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.PUNCHES_LANDED, 0)
         character.set_statistic(character_id, statistic_type.PUNCH_GOAL, 10)
         character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 0)
+        character.set_statistic(character_id, statistic_type.MOVES, 0)
     end)
 return nil

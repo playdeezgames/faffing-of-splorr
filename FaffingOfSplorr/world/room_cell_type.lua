@@ -13,7 +13,7 @@ local data = {
         blocking = true
     },
     [M.PUNCHED_PINE] = {
-        tile = grimoire.TILE_PINE,
+        tile = grimoire.TILE_PUNCHED_PINE,
         blocking = true
     }
 }

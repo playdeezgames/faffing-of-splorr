@@ -8,8 +8,8 @@ layers {
     tile: 0
   }
   cell {
-    x: 39
-    y: 21
+    x: 19
+    y: 19
     tile: 0
   }
 }

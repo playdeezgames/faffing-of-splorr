@@ -1,0 +1,35 @@
+local grimoire = require "game.grimoire"
+local avatar = require "world.avatar"
+local character = require "world.character"
+local statistic_type = require "world.statistic_type"
+
+local STATUS_PANEL_URL = "/status_panel"
+local STATUS_PANEL_TEXT_URL = "/status_panel#text"
+local PANEL_WIDTH = 160
+local PANEL_HEIGHT = 80
+
+function init(self)
+end
+
+function update(self, dt)
+	local column, row = avatar.get_position()
+	local width, height = window.get_size()
+	local position = go.get_position(STATUS_PANEL_URL)
+	if column <= grimoire.BOARD_CENTER_COLUMN then
+		position.x = width - PANEL_WIDTH
+	else
+		position.x = 0
+	end
+	if row > grimoire.BOARD_CENTER_ROW then
+		position.y = height - PANEL_HEIGHT
+	else
+		position.y = 0
+	end
+	go.set_position(position, STATUS_PANEL_URL)
+	local character_id = avatar.get_character()
+	local punches = character.get_statistic(character_id, statistic_type.PUNCHES_LANDED)
+	local goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
+	local level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
+	local moves = character.get_statistic(character_id, statistic_type.MOVES)
+	label.set_text(STATUS_PANEL_TEXT_URL, "Punches: "..punches.."\nGoal: "..goal.."\nLevel: "..level.."\nMoves: "..moves)
+end

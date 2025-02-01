@@ -5,6 +5,10 @@ components {
 components {
   id: "scene"
   component: "/scene/scene.tilemap"
+  position {
+    x: 80.0
+    y: 20.0
+  }
 }
 components {
   id: "debugger"

@@ -1,0 +1,4 @@
+images {
+  image: "/assets/images/panel-slice9.png"
+}
+extrude_borders: 2

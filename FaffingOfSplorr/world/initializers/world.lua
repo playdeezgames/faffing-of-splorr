@@ -11,7 +11,7 @@ local utility = require "game.utility"
 local M = {}
 
 local terrain_table = {
-    [room_cell_type.BLANK] = 2,
+    [room_cell_type.BLANK] = 20,
     [room_cell_type.PINE] = 1
 }
 
