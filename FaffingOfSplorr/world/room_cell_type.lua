@@ -1,8 +1,8 @@
 local grimoire = require "game.grimoire"
 local M = {}
 M.BLANK = "BLANK"
-M.PINE = "PINE"
-M.PUNCHED_PINE = "PUNCHED_PINE"
+M.LEGACY_PINE = "LEGACY_PINE"
+M.LEGACY_PUNCHED_PINE = "LEGACY_PUNCHED_PINE"
 M.GRAVEL = "GRAVEL"
 local data = {
     [M.BLANK] = {
@@ -13,11 +13,11 @@ local data = {
         tile = grimoire.TILE_GRAVEL,
         blocking = false
     },
-    [M.PINE] = {
+    [M.LEGACY_PINE] = {
         tile = grimoire.TILE_PINE,
         blocking = true
     },
-    [M.PUNCHED_PINE] = {
+    [M.LEGACY_PUNCHED_PINE] = {
         tile = grimoire.TILE_PUNCHED_PINE,
         blocking = true
     }

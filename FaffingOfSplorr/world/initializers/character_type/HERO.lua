@@ -42,10 +42,10 @@ local function do_action(character_id)
     local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
     if next_room_cell_id == nil then return end
     local next_room_cell_type_id = room_cell.get_room_cell_type(next_room_cell_id)
-    if next_room_cell_type_id == room_cell_type.PINE then
+    if next_room_cell_type_id == room_cell_type.LEGACY_PINE then
         local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
         utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
-        room_cell.set_room_cell_type(next_room_cell_id, room_cell_type.PUNCHED_PINE)
+        room_cell.set_room_cell_type(next_room_cell_id, room_cell_type.LEGACY_PUNCHED_PINE)
         local punch_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
         if punches_landed >= punch_goal then
             local punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
@@ -53,7 +53,7 @@ local function do_action(character_id)
             character.change_statistic(character_id, statistic_type.PUNCH_GOAL, punch_goal)
             utility.send_message("Yer punch is now level "..punch_level.."!")
         end
-    elseif next_room_cell_type_id == room_cell_type.PUNCHED_PINE then
+    elseif next_room_cell_type_id == room_cell_type.LEGACY_PUNCHED_PINE then
         utility.send_message("That tree was already punched!")
     else
         utility.send_message("You punch the air!")
