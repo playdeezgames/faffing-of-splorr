@@ -48,22 +48,17 @@ local function do_energy_cost(character_id, cost)
         return true
     end
 end
-local function do_action(character_id)
-    local direction_id = character.get_direction(character_id)
-    if direction_id == nil then return end
-    local next_column, next_row = directions.get_next_position(direction_id, character.get_position(character_id))
-    local room_id = character.get_room(character_id)
-    local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
-    if next_room_cell_id == nil then return end
-
+local function do_feature_action(character_id, next_room_cell_id)
     local feature_id = room_cell.get_feature(next_room_cell_id)
+
     if feature_id == nil then
-        if not do_energy_cost(character_id, 1) then return end
+        if not do_energy_cost(character_id, 1) then return false end
         utility.send_message("You punch the air!")
+        return true
     else
         local feature_type_id = feature.get_feature_type(feature_id)
         if feature_type_id == feature_type.PINE then
-            if not do_energy_cost(character_id, 1) then return end
+            if not do_energy_cost(character_id, 1) then return false end
             local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
             local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
             utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
@@ -85,8 +80,24 @@ local function do_action(character_id)
                 punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
                 utility.send_message("Yer punch is now level "..punch_level.."!")
             end
+            return true
+
+        elseif feature_type_id == feature_type.WELL then
+            character.set_statistic(character_id, statistic_type.ENERGY, character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY))
+            utility.send_message("Yer energy is refreshed!")
+            return true
         end
     end
+    return false
+end
+local function do_action(character_id)
+    local direction_id = character.get_direction(character_id)
+    if direction_id == nil then return end
+    local next_column, next_row = directions.get_next_position(direction_id, character.get_position(character_id))
+    local room_id = character.get_room(character_id)
+    local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
+    if next_room_cell_id == nil then return end
+    if not do_feature_action(character_id, next_room_cell_id) then return end
 end
 local function do_cancel(character_id)
     print("show me a game menu!")

@@ -20,10 +20,11 @@ local terrain_table = {
     [room_cell_type.GRAVEL] = 1
 }
 local TREE_COUNT = 10
+local WELL_COUNT = 1
 
 local function can_spawn_avatar(room_cell_id)
     local room_cell_type_id = room_cell.get_room_cell_type(room_cell_id)
-    return not room_cell_type.get_blocking(room_cell_type_id)
+    return not room_cell.has_feature(room_cell_id) and not room_cell_type.get_blocking(room_cell_type_id)
 end
 
 local function get_avatar_spawn_cell(room_id)
@@ -65,13 +66,13 @@ local function initialize_terrain(room_id)
     end
 end
 
-local function initialize_trees(room_id, tree_count)
+local function create_features(room_id, feature_type_id, feature_count)
     local columns, rows = room.get_size(room_id)
-    while tree_count > 0 do
+    while feature_count > 0 do
         local room_cell_id = room.get_room_cell(room_id, math.random(1, columns), math.random(1, rows))
         if not room_cell.has_feature(room_cell_id) then
-            room_cell.set_feature(room_cell_id, feature.create(feature_type.PINE))
-            tree_count = tree_count - 1
+            room_cell.set_feature(room_cell_id, feature.create(feature_type_id))
+            feature_count = feature_count - 1
         end
     end
 end
@@ -79,7 +80,8 @@ end
 local function create_room(columns, rows)
     local room_id = room.create(room_type.START, columns, rows)
     initialize_terrain(room_id)
-    initialize_trees(room_id, TREE_COUNT)
+    create_features(room_id, feature_type.PINE, TREE_COUNT)
+    create_features(room_id, feature_type.WELL, WELL_COUNT)
     spawn_avatar(room_id)
     return room_id
 end

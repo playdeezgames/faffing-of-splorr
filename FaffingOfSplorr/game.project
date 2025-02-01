@@ -20,7 +20,7 @@ show_made_with_defold = 0
 show_console_banner = 0
 
 [project]
-title = FaffingOfSplorr
+title = Tree Punchers of SPLORR!!
 
 [graphics]
 default_texture_min_filter = nearest
