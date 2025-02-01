@@ -29,6 +29,7 @@ M.MESSAGE_URL = "/message"
 
 M.LAYER_TERRAIN = "terrain"
 M.LAYER_CHARACTER = "character"
+M.LAYER_FEATURE = "feature"
 M.LAYER_TEXT = "text"
 M.LAYER_EFFECT = "effect"
 

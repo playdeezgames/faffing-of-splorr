@@ -39,6 +39,9 @@ function M.get_rows(room_id)
     assert(type(room_id) == "number", "room_id should be a number")
     return get_room_data(room_id).rows
 end
+function M.get_size(room_id)
+    return M.get_columns(room_id), M.get_rows(room_id)
+end
 function M.get_room_cell(room_id, column, row)
     assert(type(room_id) == "number", "room_id should be a number")
     assert(type(column) == "number", "column should be a number")

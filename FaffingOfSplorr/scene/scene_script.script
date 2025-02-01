@@ -8,6 +8,8 @@ local room_cell_type = require "world.room_cell_type"
 local character_type = require "world.character_type"
 local directions = require "game.directions"
 local verb_type = require "world.verb_type"
+local feature   = require "world.feature"
+local feature_type = require "world.feature_type"
 function init(self)
 	msg.post(".", "acquire_input_focus")
 	world_initializer.initialize()
@@ -41,6 +43,14 @@ local function update_room(dt)
 				tile = character_type.get_tile(character_type_id)
 			end
 			tilemap.set_tile(grimoire.SCENE_TILEMAP_URL, grimoire.LAYER_CHARACTER, column, row, tile)
+
+			tile = 0
+			local feature_id = room_cell.get_feature(room_cell_id)
+			if feature_id ~= nil then
+				local feature_type_id = feature.get_feature_type(feature_id)
+				tile = feature_type.get_tile(feature_type_id)
+			end
+			tilemap.set_tile(grimoire.SCENE_TILEMAP_URL, grimoire.LAYER_FEATURE, column, row, tile)
 
 			tile = 0
 			if cursor_column==column and cursor_row==row then
