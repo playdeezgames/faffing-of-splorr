@@ -37,6 +37,17 @@ local function do_move(character_id, direction_id)
     else
     end
 end
+local function do_energy_cost(character_id, cost)
+    local energy = character.get_statistic(character_id, statistic_type.ENERGY)
+    if energy < cost then 
+        utility.send_message("Yer out of energy!")
+        return false
+    else
+        utility.send_message("-"..cost.." energy")
+        character.change_statistic(character_id, statistic_type.ENERGY, -cost)
+        return true
+    end
+end
 local function do_action(character_id)
     local direction_id = character.get_direction(character_id)
     if direction_id == nil then return end
@@ -47,10 +58,12 @@ local function do_action(character_id)
 
     local feature_id = room_cell.get_feature(next_room_cell_id)
     if feature_id == nil then
+        if not do_energy_cost(character_id, 1) then return end
         utility.send_message("You punch the air!")
     else
         local feature_type_id = feature.get_feature_type(feature_id)
         if feature_type_id == feature_type.PINE then
+            if not do_energy_cost(character_id, 1) then return end
             local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
             local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
             utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
@@ -99,5 +112,7 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 0)
         character.set_statistic(character_id, statistic_type.MOVES, 0)
         character.set_statistic(character_id, statistic_type.TREES_MURDERED, 0)
+        character.set_statistic(character_id, statistic_type.ENERGY, 10)
+        character.set_statistic(character_id, statistic_type.MAXIMUM_ENERGY, 10)
     end)
 return nil
