@@ -51,13 +51,24 @@ local function do_action(character_id)
     else
         local feature_type_id = feature.get_feature_type(feature_id)
         if feature_type_id == feature_type.PINE then
+            local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
             local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
             utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
+
+            local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
+            if hit_points <= 0 then
+                utility.send_message("You punched that tree into oblivion.")
+                room_cell.set_feature(next_room_cell_id, nil)
+                feature.recycle(feature_id)
+            else
+                utility.send_message("The tree has "..hit_points.." HP.")
+            end
+
             local punch_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
             if punches_landed >= punch_goal then
-                local punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
                 character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, -punch_goal)
                 character.change_statistic(character_id, statistic_type.PUNCH_GOAL, punch_goal)
+                punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
                 utility.send_message("Yer punch is now level "..punch_level.."!")
             end
         end

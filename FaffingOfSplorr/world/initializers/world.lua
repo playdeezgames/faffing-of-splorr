@@ -1,4 +1,5 @@
 require "world.initializers.character_types"
+require "world.initializers.feature_types"
 local grimoire = require "game.grimoire"
 local room_type = require "world.room_type"
 local room = require "world.room"

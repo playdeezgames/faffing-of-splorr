@@ -23,6 +23,40 @@ function M.create(feature_type_id)
     return feature_id
 end
 function M.get_feature_type(feature_id)
+    assert(type(feature_id)=="number", "feature_id should be a number")
     return get_feature_data(feature_id).feature_type_id
+end
+function M.set_statistic(feature_id, statistic_type_id, statistic_value)
+    local old_value = M.get_statistic(feature_id, statistic_type_id)
+    assert(type(feature_id)=="number", "feature_id should be a number")
+    assert(type(statistic_type_id)=="string", "statistic_type_id should be a string")
+    assert(type(statistic_value)=="number", "statistic_value should be a number")
+    local feature_data = get_feature_data(feature_id)
+    if feature_data.statistics == nil then
+        feature_data.statistics = {}
+    end
+    feature_data.statistics[statistic_type_id]=statistic_value
+    return old_value
+end
+function M.get_statistic(feature_id, statistic_type_id)
+    assert(type(feature_id)=="number", "feature_id should be a number")
+    assert(type(statistic_type_id)=="string", "statistic_type_id should be a string")
+    local feature_data = get_feature_data(feature_id)
+    if feature_data.statistics == nil then
+        return nil
+    end
+    return feature_data.statistics[statistic_type_id]
+end
+function M.change_statistic(feature_id, statistic_type_id, delta)
+    assert(type(feature_id)=="number", "feature_id should be a number")
+    assert(type(statistic_type_id)=="string", "statistic_type_id should be a string")
+    assert(type(delta)=="number", "delta should be a number")
+    local new_value = M.get_statistic(feature_id, statistic_type_id) + delta
+    M.set_statistic(feature_id, statistic_type_id, new_value)
+    return new_value
+end
+function M.recycle(feature_id)
+    assert(type(feature_id)=="number", "feature_id should be a number")
+    world.data.features[feature_id] = {}
 end
 return M
