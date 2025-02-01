@@ -18,7 +18,7 @@ instances {
   id: "status_panel"
   prototype: "/status-panel/status_panel.go"
   position {
-    y: 280.0
+    y: 200.0
     z: 0.1
   }
 }

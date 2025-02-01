@@ -15,7 +15,7 @@ embedded_components {
   "}\n"
   "size {\n"
   "  x: 160.0\n"
-  "  y: 80.0\n"
+  "  y: 160.0\n"
   "}\n"
   "size_mode: SIZE_MODE_MANUAL\n"
   "textures {\n"
@@ -25,7 +25,7 @@ embedded_components {
   ""
   position {
     x: 80.0
-    y: 40.0
+    y: 80.0
   }
 }
 embedded_components {
@@ -33,7 +33,7 @@ embedded_components {
   type: "label"
   data: "size {\n"
   "  x: 150.0\n"
-  "  y: 70.0\n"
+  "  y: 150.0\n"
   "}\n"
   "color {\n"
   "  x: 0.0\n"
@@ -47,7 +47,7 @@ embedded_components {
   ""
   position {
     x: 5.0
-    y: 75.0
+    y: 155.0
     z: 0.1
   }
 }

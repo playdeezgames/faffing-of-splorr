@@ -60,6 +60,7 @@ local function do_action(character_id)
                 utility.send_message("You punched that tree into oblivion.")
                 room_cell.set_feature(next_room_cell_id, nil)
                 feature.recycle(feature_id)
+                character.change_statistic(character_id, statistic_type.TREES_MURDERED, 1)
             else
                 utility.send_message("The tree has "..hit_points.." HP.")
             end
@@ -97,5 +98,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.PUNCH_GOAL, 10)
         character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 0)
         character.set_statistic(character_id, statistic_type.MOVES, 0)
+        character.set_statistic(character_id, statistic_type.TREES_MURDERED, 0)
     end)
 return nil

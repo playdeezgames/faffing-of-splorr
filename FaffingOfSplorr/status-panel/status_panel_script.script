@@ -13,5 +13,6 @@ function update(self, dt)
 	local goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
 	local level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
 	local moves = character.get_statistic(character_id, statistic_type.MOVES)
-	label.set_text(STATUS_PANEL_TEXT_URL, "Punches: "..punches.."\nGoal: "..goal.."\nLevel: "..level.."\nMoves: "..moves)
+	local trees = character.get_statistic(character_id, statistic_type.TREES_MURDERED)
+	label.set_text(STATUS_PANEL_TEXT_URL, "Punches: "..punches.."\nGoal: "..goal.."\nLevel: "..level.."\nMoves: "..moves.."\nTrees: "..trees)
 end
