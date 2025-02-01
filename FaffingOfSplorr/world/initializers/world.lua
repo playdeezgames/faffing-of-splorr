@@ -13,8 +13,8 @@ local M = {}
 math.randomseed(100000 * (socket.gettime() % 1))
 
 local terrain_table = {
-    [room_cell_type.BLANK] = 20,
-    [room_cell_type.PINE] = 1
+    [room_cell_type.BLANK] = 5,
+    [room_cell_type.GRAVEL] = 1
 }
 
 local function can_spawn_avatar(room_cell_id)

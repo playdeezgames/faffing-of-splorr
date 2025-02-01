@@ -3,9 +3,14 @@ local M = {}
 M.BLANK = "BLANK"
 M.PINE = "PINE"
 M.PUNCHED_PINE = "PUNCHED_PINE"
+M.GRAVEL = "GRAVEL"
 local data = {
     [M.BLANK] = {
         tile = grimoire.TILE_BLANK,
+        blocking = false
+    },
+    [M.GRAVEL] = {
+        tile = grimoire.TILE_GRAVEL,
         blocking = false
     },
     [M.PINE] = {
