@@ -10,6 +10,8 @@ local room_cell = require "world.room_cell"
 local utility = require "game.utility"
 local M = {}
 
+math.randomseed(100000 * (socket.gettime() % 1))
+
 local terrain_table = {
     [room_cell_type.BLANK] = 20,
     [room_cell_type.PINE] = 1

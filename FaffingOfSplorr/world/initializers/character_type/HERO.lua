@@ -40,6 +40,7 @@ local function do_action(character_id)
     local next_column, next_row = directions.get_next_position(direction_id, character.get_position(character_id))
     local room_id = character.get_room(character_id)
     local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
+    if next_room_cell_id == nil then return end
     local next_room_cell_type_id = room_cell.get_room_cell_type(next_room_cell_id)
     if next_room_cell_type_id == room_cell_type.PINE then
         local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)

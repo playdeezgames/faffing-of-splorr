@@ -51,22 +51,8 @@ local function update_room(dt)
 	end
 end
 
-local function update_messages(dt)
-	local obj_id = go.get_id(grimoire.MESSAGE_URL)
-	local _, row = avatar.get_position()
-	local position = go.get_position(obj_id)
-	if row <= math.floor(grimoire.BOARD_ROWS/2) then
-		local _, h = window.get_size()
-		position.y = h - grimoire.TEXT_HEIGHT
-	else
-		position.y = 0
-	end
-	go.set_position(position, obj_id)
-end
-
 function update(self, dt)
 	update_room(dt)
-	update_messages(dt)
 end
 
 function on_message(self, message_id, message, sender)
