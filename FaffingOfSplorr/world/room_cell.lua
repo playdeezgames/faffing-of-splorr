@@ -73,4 +73,12 @@ function M.has_feature(room_cell_id)
     assert(type(room_cell_id)=="number", "room_cell_id should be a number")
     return get_room_cell_data(room_cell_id).feature_id ~= nil
 end
+function M.can_enter(room_cell_id)
+    if room_cell_id == nil then return false end
+    if M.has_character(room_cell_id) then return false end
+    if M.has_feature(room_cell_id) then return false end
+    local room_cell_type_id = M.get_room_cell_type(room_cell_id)
+    if room_cell_type.get_blocking(room_cell_type_id) then return false end
+    return true
+end
 return M

@@ -10,14 +10,23 @@ local statistic_type = require "world.statistic_type"
 local feature        = require "world.feature"
 local feature_type   = require "world.feature_type"
 
-local function can_enter(room_cell_id)
-    if room_cell_id == nil then return false end
-    local room_cell_type_id = room_cell.get_room_cell_type(room_cell_id)
-    if room_cell_type.get_blocking(room_cell_type_id) then return false end
-    if room_cell.has_feature(room_cell_id) then return false end
-    return true
+local function move_other_characters(room_id, character_id)
+    local other_character_ids = {}
+    for column = 1, room.get_columns(room_id) do
+        for row = 1, room.get_rows(room_id) do
+            local room_cell_id = room.get_room_cell(room_id, column, row)
+            if room_cell.has_character(room_cell_id) then
+                local other_character_id = room_cell.get_character(room_cell_id)
+                if other_character_id ~= character_id then
+                    table.insert(other_character_ids, other_character_id)
+                end
+            end
+        end
+    end
+    for _, other_character_id in ipairs(other_character_ids) do
+        character.do_verb(other_character_id, verb_type.STEP, {})
+    end
 end
-
 local function do_move(character_id, direction_id)
     local old_direction_id = character.get_direction(character_id)
     if direction_id ~= old_direction_id then
@@ -30,12 +39,12 @@ local function do_move(character_id, direction_id)
     local next_column, next_row = directions.get_next_position(direction_id, column, row)
     local room_id = room_cell.get_room(room_cell_id)
     local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
-    if can_enter(next_room_cell_id) then
+    if room_cell.can_enter(next_room_cell_id) then
         utility.send_message("Moving "..direction_id..".")
         character.set_room_cell(character_id, next_room_cell_id)
         character.change_statistic(character_id, statistic_type.MOVES, 1)
-    else
     end
+    move_other_characters(room_id, character_id)
 end
 local function do_energy_cost(character_id, cost)
     local energy = character.get_statistic(character_id, statistic_type.ENERGY)
@@ -97,7 +106,7 @@ local function do_feature_action(character_id, next_room_cell_id)
     if feature_type_id == feature_type.WELL then
         return do_drink_well(character_id)
     end
-    
+
     return false
 end
 local function do_action(character_id)
