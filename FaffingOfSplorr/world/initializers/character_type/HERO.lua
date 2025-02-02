@@ -4,7 +4,6 @@ local character = require "world.character"
 local room_cell = require "world.room_cell"
 local room = require "world.room"
 local directions = require "game.directions"
-local room_cell_type = require "world.room_cell_type"
 local utility = require "game.utility"
 local statistic_type = require "world.statistic_type"
 local feature        = require "world.feature"
@@ -77,11 +76,13 @@ local function handle_level_done(character_id)
 end
 local function do_punch_tree(character_id, feature_id, room_cell_id)
     if not do_energy_cost(character_id, 1) then return false end
-    local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
+---@diagnostic disable-next-line: param-type-mismatch
+    local punch_level = math.min(character.get_statistic(character_id, statistic_type.PUNCH_LEVEL), feature.get_statistic(feature_id, statistic_type.HIT_POINTS))
     local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
     utility.send_message("You punched that tree!", "You have landed "..punches_landed.." punches.")
 
     local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
+    character.change_statistic(character_id, statistic_type.WOOD, punch_level)
     if hit_points <= 0 then
         utility.send_message("You punched that tree into oblivion.")
         room_cell.set_feature(room_cell_id, nil)
@@ -174,5 +175,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.TREES_MURDERED, 0)
         character.set_statistic(character_id, statistic_type.ENERGY, 10)
         character.set_statistic(character_id, statistic_type.MAXIMUM_ENERGY, 10)
+        character.set_statistic(character_id, statistic_type.WOOD, 0)
     end)
 return nil
