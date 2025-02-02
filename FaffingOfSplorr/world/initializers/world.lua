@@ -1,5 +1,6 @@
 require "world.initializers.character_types"
 require "world.initializers.feature_types"
+require "world.initializers.room_types"
 local grimoire = require "game.grimoire"
 local room_type = require "world.room_type"
 local room = require "world.room"
@@ -14,13 +15,6 @@ local feature_type = require "world.feature_type"
 local M = {}
 
 math.randomseed(100000 * (socket.gettime() % 1))
-
-local terrain_table = {
-    [room_cell_type.BLANK] = 5,
-    [room_cell_type.GRAVEL] = 1
-}
-local TREE_COUNT = 10
-local WELL_COUNT = 1
 
 local function can_spawn_avatar(room_cell_id)
     local room_cell_type_id = room_cell.get_room_cell_type(room_cell_id)
@@ -42,52 +36,9 @@ local function spawn_avatar(room_id)
     avatar.set_character(character_id)
 end
 
-local function generate_room_cell_type()
-    local total = 0
-    for _, v in pairs(terrain_table) do
-        total = total + v
-    end
-    local generated = math.random(1, total)
-    for k, v in pairs(terrain_table) do
-        if generated <= v then
-            return k
-        else
-            generated = generated - v
-        end
-    end
-end
-
-local function initialize_terrain(room_id)
-    for column = 1, room.get_columns(room_id) do
-        for row = 1, room.get_rows(room_id) do
-            local room_cell_id = room.get_room_cell(room_id, column, row)
-            room_cell.set_room_cell_type(room_cell_id, generate_room_cell_type())
-        end
-    end
-end
-
-local function create_features(room_id, feature_type_id, feature_count)
-    local columns, rows = room.get_size(room_id)
-    while feature_count > 0 do
-        local room_cell_id = room.get_room_cell(room_id, math.random(1, columns), math.random(1, rows))
-        if not room_cell.has_feature(room_cell_id) then
-            room_cell.set_feature(room_cell_id, feature.create(feature_type_id))
-            feature_count = feature_count - 1
-        end
-    end
-end
-
-local function create_room(columns, rows)
-    local room_id = room.create(room_type.START, columns, rows)
-    initialize_terrain(room_id)
-    create_features(room_id, feature_type.PINE, TREE_COUNT)
-    create_features(room_id, feature_type.WELL, WELL_COUNT)
-    spawn_avatar(room_id)
-    return room_id
-end
-
 function M.initialize()
-    create_room(grimoire.BOARD_COLUMNS, grimoire.BOARD_ROWS)
+    local room_id = room.create(room_type.START, grimoire.BOARD_COLUMNS, grimoire.BOARD_ROWS)
+    spawn_avatar(room_id)
     utility.send_message(
         "Welcome to Tree Punchers of SPLORR!!",
         "<ARROWS> move | <SPACE> action | <ESC> game menu")

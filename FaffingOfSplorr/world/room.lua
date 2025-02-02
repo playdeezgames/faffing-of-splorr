@@ -52,4 +52,33 @@ function M.get_room_cell(room_id, column, row)
     end
     return room_column[row]
 end
+function M.set_statistic(room_id, statistic_type_id, statistic_value)
+    local old_value = M.get_statistic(room_id, statistic_type_id)
+    assert(type(room_id)=="number", "room_id should be a number")
+    assert(type(statistic_type_id)=="string", "statistic_type_id should be a string")
+    assert(type(statistic_value)=="number", "statistic_value should be a number")
+    local feature_data = get_room_data(room_id)
+    if feature_data.statistics == nil then
+        feature_data.statistics = {}
+    end
+    feature_data.statistics[statistic_type_id]=statistic_value
+    return old_value
+end
+function M.get_statistic(room_id, statistic_type_id)
+    assert(type(room_id)=="number", "room_id should be a number")
+    assert(type(statistic_type_id)=="string", "statistic_type_id should be a string")
+    local feature_data = get_room_data(room_id)
+    if feature_data.statistics == nil then
+        return nil
+    end
+    return feature_data.statistics[statistic_type_id]
+end
+function M.change_statistic(room_id, statistic_type_id, delta)
+    assert(type(room_id)=="number", "room_id should be a number")
+    assert(type(statistic_type_id)=="string", "statistic_type_id should be a string")
+    assert(type(delta)=="number", "delta should be a number")
+    local new_value = M.get_statistic(room_id, statistic_type_id) + delta
+    M.set_statistic(room_id, statistic_type_id, new_value)
+    return new_value
+end
 return M
