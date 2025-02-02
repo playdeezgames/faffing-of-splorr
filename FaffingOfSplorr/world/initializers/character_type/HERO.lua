@@ -107,6 +107,7 @@ local function do_drink_well(character_id)
     utility.send_message("Yer energy is refreshed!")
     return true
 end
+
 local function do_enter_portal(character_id)
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
@@ -119,6 +120,13 @@ local function do_enter_portal(character_id)
     until not room_cell.has_feature(room_cell_id) and not room_cell.has_character(room_cell_id)
     character.set_room_cell(character_id, room_cell_id)
 end
+
+local function do_sell_wood(character_id)
+    local wood = character.get_statistic(character_id, statistic_type.WOOD)
+    character.change_statistic(character_id, statistic_type.JOOLS, wood)
+    character.change_statistic(character_id, statistic_type.WOOD, -wood)
+end
+
 local function do_feature_action(character_id, room_cell_id)
     local feature_id = room_cell.get_feature(room_cell_id)
     if feature_id == nil then
@@ -136,6 +144,10 @@ local function do_feature_action(character_id, room_cell_id)
 
     if feature_type_id == feature_type.PORTAL then
         return do_enter_portal(character_id)
+    end
+
+    if feature_type_id == feature_type.WOOD_BUYER then
+        return do_sell_wood(character_id)
     end
 
     return false
@@ -176,5 +188,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.ENERGY, 10)
         character.set_statistic(character_id, statistic_type.MAXIMUM_ENERGY, 10)
         character.set_statistic(character_id, statistic_type.WOOD, 0)
+        character.set_statistic(character_id, statistic_type.JOOLS, 0)
     end)
 return nil

@@ -50,5 +50,6 @@ room_type.set_initializer(
         initialize_terrain(room_id)
         room.create_features(room_id, feature_type.PINE, room.get_statistic(room_id, statistic_type.TREE_COUNT))
         room.create_features(room_id, feature_type.WELL, room.get_statistic(room_id, statistic_type.WELL_COUNT))
+        room.create_features(room_id, feature_type.WOOD_BUYER, 1)
     end)
 return nil
