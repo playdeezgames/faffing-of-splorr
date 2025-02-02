@@ -2,12 +2,16 @@ local grimoire = require "game.grimoire"
 local M = {}
 M.PINE = "PINE"
 M.WELL = "WELL"
+M.PORTAL = "PORTAL"
 local data = {
     [M.PINE]={
         tile = grimoire.TILE_PINE
     },
     [M.WELL]={
         tile = grimoire.TILE_WELL
+    },
+    [M.PORTAL]={
+        tile = grimoire.TILE_PORTAL
     }
 }
 local function get_descriptor(feature_type_id)

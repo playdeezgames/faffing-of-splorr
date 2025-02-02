@@ -38,7 +38,7 @@ function M.get_position(character_id)
 end
 function M.set_room_cell(character_id, room_cell_id)
     assert(type(character_id)=="number", "character_id must be a number.")
-    assert(type(room_cell_id)=="number", "room_cell_id must be a number")
+    assert(type(room_cell_id)=="number" or type(room_cell_id)=="nil", "room_cell_id must be a number or nil")
     local previous_room_cell_id = M.get_room_cell(character_id)
     if previous_room_cell_id ~= nil then
         room_cell.set_character(previous_room_cell_id, nil)

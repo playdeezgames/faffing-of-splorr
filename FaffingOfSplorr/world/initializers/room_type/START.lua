@@ -35,16 +35,6 @@ local function initialize_terrain(room_id)
     end
 end
 
-local function create_features(room_id, feature_type_id, feature_count)
-    local columns, rows = room.get_size(room_id)
-    while feature_count > 0 do
-        local room_cell_id = room.get_room_cell(room_id, math.random(1, columns), math.random(1, rows))
-        if not room_cell.has_feature(room_cell_id) then
-            room_cell.set_feature(room_cell_id, feature.create(feature_type_id))
-            feature_count = feature_count - 1
-        end
-    end
-end
 room_type.set_initializer(
     room_type.START,
     function(room_id)
@@ -55,7 +45,7 @@ room_type.set_initializer(
             room.set_statistic(room_id, statistic_type.WELL_COUNT, 1)
         end
         initialize_terrain(room_id)
-        create_features(room_id, feature_type.PINE, room.get_statistic(room_id, statistic_type.TREE_COUNT))
-        create_features(room_id, feature_type.WELL, room.get_statistic(room_id, statistic_type.WELL_COUNT))
+        room.create_features(room_id, feature_type.PINE, room.get_statistic(room_id, statistic_type.TREE_COUNT))
+        room.create_features(room_id, feature_type.WELL, room.get_statistic(room_id, statistic_type.WELL_COUNT))
     end)
 return nil

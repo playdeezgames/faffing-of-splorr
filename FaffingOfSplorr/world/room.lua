@@ -1,6 +1,7 @@
 local room_cell = require "world.room_cell"
 local room_type = require "world.room_type"
 local world = require "world.world"
+local feature = require "world.feature"
 local M = {}
 world.data.rooms = {}
 
@@ -80,5 +81,23 @@ function M.change_statistic(room_id, statistic_type_id, delta)
     local new_value = M.get_statistic(room_id, statistic_type_id) + delta
     M.set_statistic(room_id, statistic_type_id, new_value)
     return new_value
+end
+function M.get_feature(room_id, column, row)
+    assert(type(room_id)=="number", "room_id should be a number")
+    assert(type(column)=="number", "column should be a number")
+    assert(type(row)=="number", "row should be a number")
+    local room_cell_id = M.get_room_cell(room_id, column, row)
+    if room_cell_id == nil then return nil end
+    return room_cell.get_feature(room_cell_id)
+end
+function M.create_features(room_id, feature_type_id, feature_count)
+    local columns, rows = M.get_size(room_id)
+    while feature_count > 0 do
+        local room_cell_id = M.get_room_cell(room_id, math.random(1, columns), math.random(1, rows))
+        if not room_cell.has_feature(room_cell_id) then
+            room_cell.set_feature(room_cell_id, feature.create(feature_type_id))
+            feature_count = feature_count - 1
+        end
+    end
 end
 return M

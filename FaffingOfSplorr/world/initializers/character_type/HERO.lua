@@ -62,7 +62,20 @@ local function do_punch_air(character_id)
     utility.send_message("You punch the air!")
     return true
 end
-local function do_punch_tree(character_id, feature_id, next_room_cell_id)
+local function handle_level_done(character_id)
+    local room_id = character.get_room(character_id)
+    for column = 1, room.get_columns(room_id) do
+        for row = 1, room.get_rows(room_id) do
+            local feature_id = room.get_feature(room_id, column, row)
+            if feature_id ~= nil and feature.get_feature_type(feature_id) == feature_type.PINE then
+                --found a tree!
+                return
+            end
+        end
+    end
+    room.create_features(room_id, feature_type.PORTAL, 1)
+end
+local function do_punch_tree(character_id, feature_id, room_cell_id)
     if not do_energy_cost(character_id, 1) then return false end
     local punch_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
     local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
@@ -71,9 +84,10 @@ local function do_punch_tree(character_id, feature_id, next_room_cell_id)
     local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
     if hit_points <= 0 then
         utility.send_message("You punched that tree into oblivion.")
-        room_cell.set_feature(next_room_cell_id, nil)
+        room_cell.set_feature(room_cell_id, nil)
         feature.recycle(feature_id)
         character.change_statistic(character_id, statistic_type.TREES_MURDERED, 1)
+        handle_level_done(character_id)
     else
         utility.send_message("The tree has "..hit_points.." HP.")
     end
@@ -92,19 +106,34 @@ local function do_drink_well(character_id)
     utility.send_message("Yer energy is refreshed!")
     return true
 end
-local function do_feature_action(character_id, next_room_cell_id)
-    local feature_id = room_cell.get_feature(next_room_cell_id)
+local function do_enter_portal(character_id)
+    local room_id = character.get_room(character_id)
+    character.set_room_cell(character_id, nil)
+    --reinitialize room
+    local room_cell_id, column, row
+    repeat
+        column, row = math.random(1, room.get_columns(room_id)), math.random(1, room.get_rows(room_id))
+        room_cell_id = room.get_room_cell(room_id, column, row)
+    until not room_cell.has_feature(room_cell_id) and not room_cell.has_character(room_cell_id)
+    character.set_room_cell(character_id, room_cell_id)
+end
+local function do_feature_action(character_id, room_cell_id)
+    local feature_id = room_cell.get_feature(room_cell_id)
     if feature_id == nil then
         return do_punch_air(character_id)
     end
 
     local feature_type_id = feature.get_feature_type(feature_id)
     if feature_type_id == feature_type.PINE then
-        return do_punch_tree(character_id, feature_id, next_room_cell_id)
+        return do_punch_tree(character_id, feature_id, room_cell_id)
     end
 
     if feature_type_id == feature_type.WELL then
         return do_drink_well(character_id)
+    end
+
+    if feature_type_id == feature_type.PORTAL then
+        return do_enter_portal(character_id)
     end
 
     return false
@@ -114,9 +143,9 @@ local function do_action(character_id)
     if direction_id == nil then return end
     local next_column, next_row = directions.get_next_position(direction_id, character.get_position(character_id))
     local room_id = character.get_room(character_id)
-    local next_room_cell_id = room.get_room_cell(room_id, next_column, next_row)
-    if next_room_cell_id == nil then return end
-    if not do_feature_action(character_id, next_room_cell_id) then return end
+    local room_cell_id = room.get_room_cell(room_id, next_column, next_row)
+    if room_cell_id == nil then return end
+    if not do_feature_action(character_id, room_cell_id) then return end
 end
 local function do_cancel(character_id)
     print("show me a game menu!")
