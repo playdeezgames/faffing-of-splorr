@@ -109,7 +109,8 @@ end
 local function do_enter_portal(character_id)
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
-    --reinitialize room
+    room.change_statistic(room_id, statistic_type.TREE_COUNT, 1)
+    room.initialize(room_id)
     local room_cell_id, column, row
     repeat
         column, row = math.random(1, room.get_columns(room_id)), math.random(1, room.get_rows(room_id))
@@ -168,7 +169,7 @@ character_type.set_initializer(
     function(character_id) 
         character.set_statistic(character_id, statistic_type.PUNCHES_LANDED, 0)
         character.set_statistic(character_id, statistic_type.PUNCH_GOAL, 10)
-        character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 0)
+        character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
         character.set_statistic(character_id, statistic_type.MOVES, 0)
         character.set_statistic(character_id, statistic_type.TREES_MURDERED, 0)
         character.set_statistic(character_id, statistic_type.ENERGY, 10)

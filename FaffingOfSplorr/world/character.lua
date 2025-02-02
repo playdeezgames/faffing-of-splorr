@@ -92,6 +92,7 @@ function M.do_verb(character_id, verb_type_id, context)
     end
 end
 function M.recycle(character_id)
+    if character_id == nil then return end
     assert(type(character_id)=="number", "character_id must be a number.")
     world.data.characters[character_id] = {}
 end

@@ -56,6 +56,7 @@ function M.change_statistic(feature_id, statistic_type_id, delta)
     return new_value
 end
 function M.recycle(feature_id)
+    if feature_id == nil then return end
     assert(type(feature_id)=="number", "feature_id should be a number")
     world.data.features[feature_id] = {}
 end

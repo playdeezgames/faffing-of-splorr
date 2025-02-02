@@ -5,6 +5,7 @@ local room_cell = require "world.room_cell"
 local feature = require "world.feature"
 local room_cell_type = require "world.room_cell_type"
 local statistic_type = require "world.statistic_type"
+local character = require "world.character"
 
 local terrain_table = {
     [room_cell_type.BLANK] = 5,
@@ -30,6 +31,8 @@ local function initialize_terrain(room_id)
     for column = 1, room.get_columns(room_id) do
         for row = 1, room.get_rows(room_id) do
             local room_cell_id = room.get_room_cell(room_id, column, row)
+            feature.recycle(room_cell.get_feature(room_cell_id))
+            character.recycle(room_cell.get_character(room_cell_id))
             room_cell.set_room_cell_type(room_cell_id, generate_room_cell_type())
         end
     end

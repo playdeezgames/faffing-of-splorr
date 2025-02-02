@@ -8,6 +8,13 @@ world.data.rooms = {}
 local function get_room_data(room_id)
     return world.data.rooms[room_id]
 end
+function M.initialize(room_id)
+    assert(type(room_id) == "number", "room_id should be a number")
+    local initializer = room_type.get_initializer(M.get_room_type(room_id))
+    if initializer ~= nil then
+        initializer(room_id)
+    end
+end
 function M.create(room_type_id, columns, rows)
     local room_id = #world.data.rooms + 1
     world.data.rooms[room_id]={
@@ -22,10 +29,7 @@ function M.create(room_type_id, columns, rows)
             get_room_data(room_id).cells[column][row] = room_cell.create(room_type.get_room_cell_type(M.get_room_type(room_id)), room_id, column, row)
         end
     end
-    local initializer = room_type.get_initializer(room_type_id)
-    if initializer ~= nil then
-        initializer(room_id)
-    end
+    M.initialize(room_id)
     return room_id
 end
 function M.get_room_type(room_id)
