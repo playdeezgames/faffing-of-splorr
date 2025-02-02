@@ -1,0 +1,1 @@
+require "world.initializers.feature_type.PINE"
