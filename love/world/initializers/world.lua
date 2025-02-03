@@ -18,17 +18,12 @@ local M = {}
 
 math.randomseed(os.time())
 
-local function can_spawn_avatar(room_cell_id)
-    local room_cell_type_id = room_cell.get_room_cell_type(room_cell_id)
-    return not room_cell.has_feature(room_cell_id) and not room_cell_type.get_blocking(room_cell_type_id)
-end
-
 local function get_avatar_spawn_cell(room_id)
     local room_cell_id
     repeat
         local column, row = math.random(1, room.get_columns(room_id)), math.random(room.get_rows(room_id))
         room_cell_id = room.get_room_cell(room_id, column, row)
-    until can_spawn_avatar(room_cell_id)
+    until room_cell.can_enter(room_cell_id)
     return room_cell_id
 end
 

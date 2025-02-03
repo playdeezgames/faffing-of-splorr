@@ -9,6 +9,7 @@ local statistic_type = require "world.statistic_type"
 local feature        = require "world.feature"
 local feature_type   = require "world.feature_type"
 local colors         = require "game.colors"
+local metadata_type  = require "world.metadata_type"
 
 local function move_other_characters(room_id, character_id)
     local other_character_ids = {}
@@ -31,7 +32,7 @@ local function do_move(character_id, direction_id)
     local old_direction_id = character.get_direction(character_id)
     if direction_id ~= old_direction_id then
         character.set_direction(character_id, direction_id)
-        utility.send_message(colors.LIGHT_GRAY, "Turning to face "..direction_id..".")
+        utility.send_message(colors.LIGHT_GRAY, "Facing "..direction_id..".")
         return
     end
     local room_cell_id = character.get_room_cell(character_id)
@@ -147,6 +148,11 @@ local function do_sell_wood(character_id)
     return true
 end
 
+local function do_read_sign(character_id, feature_id)
+    local text = feature.get_metadata(feature_id, metadata_type.TEXT)
+    utility.send_message(colors.LIGHT_BLUE, text)
+end
+
 local function do_feature_action(character_id, room_cell_id)
     local feature_id = room_cell.get_feature(room_cell_id)
     if feature_id == nil then
@@ -168,6 +174,10 @@ local function do_feature_action(character_id, room_cell_id)
 
     if feature_type_id == feature_type.WOOD_BUYER then
         return do_sell_wood(character_id)
+    end
+
+    if feature_type_id == feature_type.SIGN then
+        return do_read_sign(character_id, feature_id)
     end
 
     return false

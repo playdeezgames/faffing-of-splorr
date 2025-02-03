@@ -5,11 +5,11 @@ local romfont = require "romfont"
 local colors  = require "game.colors"
 local M = {}
 
-local STATUS_PANEL_COLUMNS = 40
+local STATUS_PANEL_COLUMNS = 20
 local STATUS_PANEL_ROWS = 40
 local STATUS_PANEL_OFFSET_X = 0
 local STATUS_PANEL_OFFSET_Y = 0
-local STATUS_PANEL_SCALE_X = 1
+local STATUS_PANEL_SCALE_X = 2
 local STATUS_PANEL_SCALE_Y = 2
 
 local status_panel_cells

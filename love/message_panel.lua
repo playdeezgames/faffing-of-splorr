@@ -1,12 +1,12 @@
 local romfont = require "romfont"
 local M = {}
 
-local MESSAGE_PANEL_COLUMNS = 40
-local MESSAGE_PANEL_ROWS = 80
+local MESSAGE_PANEL_COLUMNS = 20
+local MESSAGE_PANEL_ROWS = 40
 local MESSAGE_PANEL_OFFSET_X = 960
 local MESSAGE_PANEL_OFFSET_Y = 0
-local MESSAGE_PANEL_SCALE_X = 1
-local MESSAGE_PANEL_SCALE_Y = 1
+local MESSAGE_PANEL_SCALE_X = 2
+local MESSAGE_PANEL_SCALE_Y = 2
 
 local message_panel_cells
 local message_panel_canvas

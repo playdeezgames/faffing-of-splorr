@@ -66,4 +66,25 @@ function M.get_description(feature_id)
     if describer == nil then return "" end
     return describer(feature_id)
 end
+function M.get_metadata(feature_id, metadata_type_id)
+    assert(type(feature_id)=="number", "feature_id should be a number")
+    assert(type(metadata_type_id)=="string", "metadata_type_id should be a string")
+    local feature_data = get_feature_data(feature_id)
+    if feature_data.metadatas == nil then
+        return nil
+    end
+    return feature_data.metadatas[metadata_type_id]
+end
+function M.set_metadata(feature_id, metadata_type_id, metadata_value)
+    local old_metadata_value = M.get_metadata(feature_id, metadata_type_id)
+    assert(type(feature_id)=="number", "feature_id should be a number")
+    assert(type(metadata_type_id)=="string", "metadata_type_id should be a string")
+    assert(type(metadata_value)=="string" or type(metadata_value)=="nil", "metadata_value should be a string or nil")
+    local feature_data = get_feature_data(feature_id)
+    if feature_data.metadatas == nil then
+        feature_data.metadatas = {}
+    end
+    feature_data.metadatas[metadata_type_id] = metadata_value
+    return old_metadata_value
+end
 return M

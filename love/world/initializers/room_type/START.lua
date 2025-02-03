@@ -6,6 +6,7 @@ local feature = require "world.feature"
 local room_cell_type = require "world.room_cell_type"
 local statistic_type = require "world.statistic_type"
 local character = require "world.character"
+local metadata_type = require "world.metadata_type"
 
 local terrain_table = {
     [room_cell_type.BLANK] = 5,
@@ -52,7 +53,8 @@ room_type.set_initializer(
         room.create_features(room_id, feature_type.WELL, room.get_statistic(room_id, statistic_type.WELL_COUNT))
         room.create_features(room_id, feature_type.WOOD_BUYER, 1)
         if room.get_statistic(room_id, statistic_type.TREE_COUNT) == 1 then
-            room.create_features(room_id, feature_type.SIGN, 1)
+            local feature_id = room.create_features(room_id, feature_type.SIGN, 1)[1]
+            feature.set_metadata(feature_id, metadata_type.TEXT, "Punch trees. Sell wood. Drink from the well. Go through the portal.")
         end
     end)
 return nil
