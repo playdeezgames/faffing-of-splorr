@@ -117,6 +117,10 @@ local function do_drink_well(character_id)
 end
 
 local function do_enter_portal(character_id)
+    if character.get_statistic(character_id, statistic_type.WOOD) > 0 then
+        utility.send_message(colors.RED, "You cannot take wood through the portal.")
+        return true
+    end
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
     room.change_statistic(room_id, statistic_type.TREE_COUNT, 1)

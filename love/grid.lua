@@ -42,7 +42,9 @@ function M.set_up()
 end
 local function get_cursor_position(character_id)
 	local direction_id = character.get_direction(character_id)
-	if direction_id == nil then return end
+	if direction_id == nil then 
+    return room_cell.get_position(character.get_room_cell(character_id))
+  end
 	local room_cell_id = character.get_room_cell(character_id)
 	local column, row = room_cell.get_position(room_cell_id)
 	return directions.get_next_position(direction_id, column, row)

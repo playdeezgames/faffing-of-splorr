@@ -19,6 +19,7 @@ function love.load(arg)
     message_panel.set_up()
     tool_tip.set_up()
     world_initializer.initialize()
+    love.keyboard.setKeyRepeat(true)
 end
 
 function love.update()
