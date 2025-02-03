@@ -3,6 +3,7 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
 end
 local romfont        = require "romfont"
 local status_panel = require "status_panel"
+local message_panel = require "message_panel"
 local grid = require "grid"
 local character = require "world.character"
 local verb_type      = require "world.verb_type"
@@ -14,6 +15,7 @@ function love.load(arg)
     romfont.set_up()
     grid.set_up()
     status_panel.set_up()
+    message_panel.set_up()
     world_initializer.initialize()
 end
 
@@ -24,6 +26,7 @@ end
 function love.draw()
   grid.draw()
   status_panel.draw()
+  message_panel.draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)

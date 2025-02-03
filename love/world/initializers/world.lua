@@ -41,7 +41,9 @@ function M.initialize()
     spawn_avatar(room_id)
     utility.send_message(
         "Welcome to Tree Punchers of SPLORR!!",
-        "<ARROWS> move | <SPACE> action | <ESC> game menu")
+        "<ARROWS> move",
+        "<SPACE> action",
+        "<ESC> game menu")
 end
 
 return M
