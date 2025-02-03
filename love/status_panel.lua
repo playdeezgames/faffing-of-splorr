@@ -2,6 +2,7 @@ local character = require "world.character"
 local avatar = require "world.avatar"
 local statistic_type = require "world.statistic_type"
 local romfont = require "romfont"
+local colors  = require "game.colors"
 local M = {}
 
 local STATUS_PANEL_COLUMNS = 40
@@ -49,40 +50,38 @@ local function write_status_panel(column, row, color, text)
     end
 end
 
-local COLOR_LIGHT_GRAY = {2/3,2/3,2/3}
-
 function M.update()
     local character_id = avatar.get_character()
     clear_status_panel()
     local row = 1
     local xp = character.get_statistic(character_id, statistic_type.PUNCHES_LANDED)
     local xp_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
+    write_status_panel(1, row, colors.LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
     row = row + 1
 
     local xp_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, " Level: "..xp_level)
+    write_status_panel(1, row, colors.LIGHT_GRAY, " Level: "..xp_level)
     row = row + 1
 
     local moves = character.get_statistic(character_id, statistic_type.MOVES)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, " Moves: "..moves)
+    write_status_panel(1, row, colors.LIGHT_GRAY, " Moves: "..moves)
     row = row + 1
 
     local trees = character.get_statistic(character_id, statistic_type.TREES_MURDERED)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, " Trees: "..trees)
+    write_status_panel(1, row, colors.LIGHT_GRAY, " Trees: "..trees)
     row = row + 1
 
     local energy = character.get_statistic(character_id, statistic_type.ENERGY)
     local maximum_energy = character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, "Energy: "..energy.."/"..maximum_energy)
+    write_status_panel(1, row, colors.LIGHT_GRAY, "Energy: "..energy.."/"..maximum_energy)
     row = row + 1
 
     local wood = character.get_statistic(character_id, statistic_type.WOOD)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, "  Wood: "..wood)
+    write_status_panel(1, row, colors.LIGHT_GRAY, "  Wood: "..wood)
     row = row + 1
 
     local jools = character.get_statistic(character_id, statistic_type.JOOLS)
-    write_status_panel(1, row, COLOR_LIGHT_GRAY, " Jools: "..jools)
+    write_status_panel(1, row, colors.LIGHT_GRAY, " Jools: "..jools)
     row = row + 1
 end
 

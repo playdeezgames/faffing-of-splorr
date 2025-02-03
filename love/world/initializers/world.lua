@@ -13,6 +13,7 @@ local room_cell = require "world.room_cell"
 local utility = require "game.utility"
 local feature = require "world.feature"
 local feature_type = require "world.feature_type"
+local colors       = require "game.colors"
 local M = {}
 
 math.randomseed(os.time())
@@ -41,6 +42,7 @@ function M.initialize()
     local room_id = room.create(room_type.START, grimoire.BOARD_COLUMNS, grimoire.BOARD_ROWS)
     spawn_avatar(room_id)
     utility.send_message(
+        colors.WHITE,
         "Welcome to Tree Punchers of SPLORR!!",
         "<ARROWS> move",
         "<SPACE> action",

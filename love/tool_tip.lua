@@ -3,6 +3,7 @@ local character = require "world.character"
 local room_cell = require "world.room_cell"
 local directions= require "game.directions"
 local room      = require "world.room"
+local colors    = require "game.colors"
 local M = {}
 local romfont = require "romfont"
 local TOOL_TIP_COLUMNS = 80
@@ -24,8 +25,6 @@ function M.set_text(text)
     tool_tip_text = text
 end
 
-local COLOR_WHITE = {1,1,1}
-
 local function get_cursor_position(character_id)
 	local direction_id = character.get_direction(character_id)
 	if direction_id == nil then return end
@@ -44,7 +43,7 @@ function M.draw()
     love.graphics.setCanvas(tool_tip_canvas)
     love.graphics.clear()
     local r, g, b, a = love.graphics.getColor()
-    love.graphics.setColor(COLOR_WHITE)
+    love.graphics.setColor(colors.WHITE)
     local plot_x = (TOOL_TIP_COLUMNS - #tool_tip_text) * romfont.ROMFONT_CELL_WIDTH / 2
     local plot_y = 0
     for index = 1, #tool_tip_text do
