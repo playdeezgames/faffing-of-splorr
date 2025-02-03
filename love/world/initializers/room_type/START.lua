@@ -51,5 +51,8 @@ room_type.set_initializer(
         room.create_features(room_id, feature_type.PINE, room.get_statistic(room_id, statistic_type.TREE_COUNT))
         room.create_features(room_id, feature_type.WELL, room.get_statistic(room_id, statistic_type.WELL_COUNT))
         room.create_features(room_id, feature_type.WOOD_BUYER, 1)
+        if room.get_statistic(room_id, statistic_type.TREE_COUNT) == 1 then
+            room.create_features(room_id, feature_type.SIGN, 1)
+        end
     end)
 return nil
