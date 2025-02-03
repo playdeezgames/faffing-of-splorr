@@ -2,7 +2,6 @@ local feature_type = require "world.feature_type"
 local world = require "world.world"
 local M = {}
 world.data.features = {}
-local describer = nil
 local function get_feature_data(feature_id)
     return world.data.features[feature_id]
 end
@@ -63,11 +62,8 @@ function M.recycle(feature_id)
 end
 function M.get_description(feature_id)
     if feature_id == nil then return "" end
+    local describer = feature_type.get_describer(M.get_feature_type(feature_id))
     if describer == nil then return "" end
     return describer(feature_id)
-end
-function M.set_describer(new_describer)
-    assert(type(describer)=="function" or type(describer)=="nil", "describer must be a function or nil")
-    describer = new_describer
 end
 return M

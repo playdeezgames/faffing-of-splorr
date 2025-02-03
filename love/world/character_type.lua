@@ -39,4 +39,15 @@ function M.set_verb_doer(character_type_id, verb_doer)
     get_descriptor(character_type_id).verb_doer = verb_doer
     return old_verb_doer
 end
+function M.get_describer(character_type_id)
+    assert(type(character_type_id) == "string", "character_type_id should be a string")
+    return get_descriptor(character_type_id).describer
+end
+function M.set_describer(character_type_id, describer)
+    assert(type(character_type_id) == "string", "character_type_id should be a string")
+    assert(type(describer) == "function", "describer should be a function")
+    local old_describer = M.get_describer(character_type_id)
+    get_descriptor(character_type_id).describer = describer
+    return old_describer
+end
 return M
