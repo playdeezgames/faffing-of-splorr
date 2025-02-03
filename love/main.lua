@@ -107,12 +107,12 @@ end
 
 
 function love.update()
-  status_panel.update_status_panel()
+  status_panel.update()
 end
 
 function love.draw()
   draw_grid()
-  status_panel.draw_status_panel()
+  status_panel.draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)

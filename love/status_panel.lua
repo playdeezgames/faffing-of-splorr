@@ -14,7 +14,7 @@ local STATUS_PANEL_SCALE_Y = 2
 local status_panel_cells
 local status_panel_canvas
 
-function M.draw_status_panel()
+function M.draw()
     love.graphics.setCanvas(status_panel_canvas)
     love.graphics.clear()
     local r,g,b,a = love.graphics.getColor()
@@ -31,7 +31,7 @@ function M.draw_status_panel()
     love.graphics.setCanvas()
     love.graphics.draw(status_panel_canvas, STATUS_PANEL_OFFSET_X, STATUS_PANEL_OFFSET_Y, 0, STATUS_PANEL_SCALE_X, STATUS_PANEL_SCALE_Y)
 end
-  
+
 local function clear_status_panel()
     for row = 1, STATUS_PANEL_ROWS do
       for column = 1, STATUS_PANEL_COLUMNS do
@@ -39,7 +39,7 @@ local function clear_status_panel()
       end
     end
 end
-  
+
 local function write_status_panel(column, row, color, text)
     for index = 1, #text do
       local cell = status_panel_cells[row][column]
@@ -48,11 +48,10 @@ local function write_status_panel(column, row, color, text)
       column = column + 1
     end
 end
-  
+
 local COLOR_LIGHT_GRAY = {2/3,2/3,2/3}
-local COLOR_WHITE = {1,1,1}
-  
-function M.update_status_panel()
+
+function M.update()
     local character_id = avatar.get_character()
     clear_status_panel()
     local row = 1
@@ -60,28 +59,28 @@ function M.update_status_panel()
     local xp_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
     row = row + 1
-    
+
     local xp_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, " Level: "..xp_level)
     row = row + 1
-    
+
     local moves = character.get_statistic(character_id, statistic_type.MOVES)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, " Moves: "..moves)
     row = row + 1
-    
+
     local trees = character.get_statistic(character_id, statistic_type.TREES_MURDERED)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, " Trees: "..trees)
     row = row + 1
-  
+
     local energy = character.get_statistic(character_id, statistic_type.ENERGY)
     local maximum_energy = character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, "Energy: "..energy.."/"..maximum_energy)
     row = row + 1
-  
+
     local wood = character.get_statistic(character_id, statistic_type.WOOD)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, "  Wood: "..wood)
     row = row + 1
-  
+
     local jools = character.get_statistic(character_id, statistic_type.JOOLS)
     write_status_panel(1, row, COLOR_LIGHT_GRAY, " Jools: "..jools)
     row = row + 1
