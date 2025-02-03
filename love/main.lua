@@ -8,6 +8,7 @@ local character_type = require "world.character_type"
 local verb_type      = require "world.verb_type"
 local directions     = require "game.directions"
 local grimoire       = require "game.grimoire"
+local statistic_type = require "world.statistic_type"
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   require("lldebugger").start()
 end
@@ -22,12 +23,47 @@ local GRID_OFFSET_X = 320
 local GRID_OFFSET_Y = 0
 local GRID_SCALE_X = 4
 local GRID_SCALE_Y = 4
+local GRID_TILESET_FILENAME = "assets/images/colored_tilemap_packed.png"
+
+local ROMFONT_TILESET_FILENAME = "assets/images/romfont8x8.png"
+local ROMFONT_CELL_WIDTH = 8
+local ROMFONT_CELL_HEIGHT = 8
+
+local STATUS_PANEL_COLUMNS = 40
+local STATUS_PANEL_ROWS = 40
+local STATUS_PANEL_OFFSET_X = 0
+local STATUS_PANEL_OFFSET_Y = 0
+local STATUS_PANEL_SCALE_X = 1
+local STATUS_PANEL_SCALE_Y = 2
 
 local grid_tile_quads = {}
 local grid_tileset_image
 local grid_canvas
 
+local romfont_tile_quads = {}
+local romfont_tileset_image
+
+local status_panel_cells
+local status_panel_canvas
+
+local function set_up_romfont()
+  romfont_tileset_image = love.graphics.newImage(ROMFONT_TILESET_FILENAME)
+  local image_width = romfont_tileset_image:getWidth()
+  local image_height = romfont_tileset_image:getHeight()
+  local tile_columns = image_width / ROMFONT_CELL_WIDTH
+  local tile_rows = image_height / ROMFONT_CELL_HEIGHT
+  for row = 1, tile_rows do
+    for column = 1, tile_columns do
+      local source_x = column * ROMFONT_CELL_WIDTH - ROMFONT_CELL_WIDTH
+      local source_y = row * ROMFONT_CELL_HEIGHT - ROMFONT_CELL_HEIGHT
+      local quad = love.graphics.newQuad(source_x, source_y, ROMFONT_CELL_WIDTH, ROMFONT_CELL_HEIGHT, romfont_tileset_image)
+      table.insert(romfont_tile_quads, quad)
+    end
+  end
+end
+
 local function set_up_grid()
+  grid_tileset_image = love.graphics.newImage(GRID_TILESET_FILENAME)
   grid_canvas = love.graphics.newCanvas(GRID_COLUMNS * GRID_CELL_WIDTH, GRID_ROWS * GRID_CELL_HEIGHT)
   grid_canvas:setFilter("nearest","nearest")
   local image_width = grid_tileset_image:getWidth()
@@ -44,9 +80,24 @@ local function set_up_grid()
   end
 end
 
+local function set_up_status_panel()
+  status_panel_canvas = love.graphics.newCanvas(STATUS_PANEL_COLUMNS * ROMFONT_CELL_WIDTH, STATUS_PANEL_ROWS * ROMFONT_CELL_HEIGHT)
+  status_panel_canvas:setFilter("nearest","nearest")
+  status_panel_cells = {}
+  while #status_panel_cells < STATUS_PANEL_ROWS do
+    local line = {}
+    table.insert(status_panel_cells, line)
+    while #line < STATUS_PANEL_COLUMNS do
+      local cell = {color={1,1,1},character=1}
+      table.insert(line, cell)
+    end
+  end
+end
+
 function love.load(arg)
-    grid_tileset_image = love.graphics.newImage("assets/images/colored_tilemap_packed.png")
+    set_up_romfont()
     set_up_grid()
+    set_up_status_panel()
     world_initializer.initialize()
 end
 
@@ -98,9 +149,87 @@ local function draw_grid()
   love.graphics.setCanvas()
 end
 
+local function draw_status_panel()
+  love.graphics.setCanvas(status_panel_canvas)
+  love.graphics.clear()
+  local r,g,b,a = love.graphics.getColor()
+  for row = 1, STATUS_PANEL_ROWS do
+    local plot_y = row * ROMFONT_CELL_HEIGHT - ROMFONT_CELL_HEIGHT
+    for column = 1, STATUS_PANEL_COLUMNS do
+      local plot_x = column * ROMFONT_CELL_WIDTH - ROMFONT_CELL_WIDTH
+      local cell = status_panel_cells[row][column]
+      love.graphics.setColor(cell.color)
+      love.graphics.draw(romfont_tileset_image, romfont_tile_quads[cell.character], plot_x, plot_y)
+    end
+  end
+  love.graphics.setColor(r,g,b,a)
+  love.graphics.setCanvas()
+end
+
+local function clear_status_panel()
+  for row = 1, STATUS_PANEL_ROWS do
+    for column = 1, STATUS_PANEL_COLUMNS do
+      status_panel_cells[row][column].character = 1
+    end
+  end
+end
+
+local function write_status_panel(column, row, color, text)
+  for index = 1, #text do
+    local cell = status_panel_cells[row][column]
+    cell.color = color
+    cell.character = string.byte(text, index) + 1
+    column = column + 1
+  end
+end
+
+local COLOR_LIGHT_GRAY = {2/3,2/3,2/3}
+local COLOR_WHITE = {1,1,1}
+
+local function update_status_panel()
+  local character_id = avatar.get_character()
+  clear_status_panel()
+  local row = 1
+  local xp = character.get_statistic(character_id, statistic_type.PUNCHES_LANDED)
+  local xp_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
+  row = row + 1
+  
+  local xp_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, " Level: "..xp_level)
+  row = row + 1
+  
+  local moves = character.get_statistic(character_id, statistic_type.MOVES)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, " Moves: "..moves)
+  row = row + 1
+  
+  local trees = character.get_statistic(character_id, statistic_type.TREES_MURDERED)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, " Trees: "..trees)
+  row = row + 1
+
+  local energy = character.get_statistic(character_id, statistic_type.ENERGY)
+  local maximum_energy = character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, "Energy: "..energy.."/"..maximum_energy)
+  row = row + 1
+
+  local wood = character.get_statistic(character_id, statistic_type.WOOD)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, "  Wood: "..wood)
+  row = row + 1
+
+  local jools = character.get_statistic(character_id, statistic_type.JOOLS)
+  write_status_panel(1, row, COLOR_LIGHT_GRAY, " Jools: "..jools)
+  row = row + 1
+end
+
+function love.update()
+  update_status_panel()
+end
+
 function love.draw()
   draw_grid()
+  draw_status_panel()
   love.graphics.draw(grid_canvas, GRID_OFFSET_X, GRID_OFFSET_Y, 0, GRID_SCALE_X, GRID_SCALE_Y)
+  love.graphics.draw(status_panel_canvas, STATUS_PANEL_OFFSET_X, STATUS_PANEL_OFFSET_Y, 0, STATUS_PANEL_SCALE_X, STATUS_PANEL_SCALE_Y)
 end
 
 function love.keypressed(key, scancode, isrepeat)
