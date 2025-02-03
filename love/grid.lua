@@ -23,7 +23,7 @@ local grid_tile_quads = {}
 local grid_tileset_image
 local grid_canvas
 
-function M.set_up_grid()
+function M.set_up()
   grid_tileset_image = love.graphics.newImage(GRID_TILESET_FILENAME)
   grid_canvas = love.graphics.newCanvas(GRID_COLUMNS * GRID_CELL_WIDTH, GRID_ROWS * GRID_CELL_HEIGHT)
   grid_canvas:setFilter("nearest","nearest")
@@ -52,7 +52,7 @@ local function draw_grid_tile(tile, x, y)
   love.graphics.draw(grid_tileset_image, grid_tile_quads[tile], x, y)
 end
 
-function M.draw_grid()
+function M.draw()
   love.graphics.setCanvas(grid_canvas)
   local avatar_character_id = avatar.get_character()
   local cursor_column, cursor_row = get_cursor_position(avatar_character_id)

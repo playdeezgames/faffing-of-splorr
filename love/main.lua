@@ -10,10 +10,9 @@ local directions     = require "game.directions"
 local world_initializer = require "world.initializers.world"
 local avatar = require "world.avatar"
 
-
 function love.load(arg)
     romfont.set_up()
-    grid.set_up_grid()
+    grid.set_up()
     status_panel.set_up()
     world_initializer.initialize()
 end
@@ -23,7 +22,7 @@ function love.update()
 end
 
 function love.draw()
-  grid.draw_grid()
+  grid.draw()
   status_panel.draw()
 end
 
