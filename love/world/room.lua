@@ -48,6 +48,7 @@ function M.get_size(room_id)
     return M.get_columns(room_id), M.get_rows(room_id)
 end
 function M.get_room_cell(room_id, column, row)
+    if column == nil or row == nil then return nil end
     assert(type(room_id) == "number", "room_id should be a number")
     assert(type(column) == "number", "column should be a number")
     assert(type(row) == "number", "row should be a number")

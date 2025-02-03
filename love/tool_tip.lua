@@ -1,3 +1,8 @@
+local avatar = require "world.avatar"
+local character = require "world.character"
+local room_cell = require "world.room_cell"
+local directions= require "game.directions"
+local room      = require "world.room"
 local M = {}
 local romfont = require "romfont"
 local TOOL_TIP_COLUMNS = 80
@@ -21,7 +26,18 @@ end
 
 local COLOR_WHITE = {1,1,1}
 
+local function get_cursor_position(character_id)
+	local direction_id = character.get_direction(character_id)
+	if direction_id == nil then return end
+	local room_cell_id = character.get_room_cell(character_id)
+	local column, row = room_cell.get_position(room_cell_id)
+	return directions.get_next_position(direction_id, column, row)
+end
+
 function M.update()
+    local character_id = avatar.get_character()
+    local room_cell_id = room.get_room_cell(character.get_room(character_id), get_cursor_position(character_id))
+    tool_tip_text = room_cell.get_description(room_cell_id)
 end
 
 function M.draw()

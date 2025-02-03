@@ -2,6 +2,7 @@ local room_cell_type = require "world.room_cell_type"
 local world = require "world.world"
 local M = {}
 world.data.room_cells = {}
+local describer = nil
 local function get_room_cell_data(room_cell_id)
     return world.data.room_cells[room_cell_id]
 end
@@ -80,5 +81,14 @@ function M.can_enter(room_cell_id)
     local room_cell_type_id = M.get_room_cell_type(room_cell_id)
     if room_cell_type.get_blocking(room_cell_type_id) then return false end
     return true
+end
+function M.get_description(room_cell_id)
+    if room_cell_id == nil then return "" end
+    if describer == nil then return "" end
+    return describer(room_cell_id)
+end
+function M.set_describer(new_describer)
+    assert(type(describer)=="function" or type(describer)=="nil", "describer must be a function or nil")
+    describer = new_describer
 end
 return M

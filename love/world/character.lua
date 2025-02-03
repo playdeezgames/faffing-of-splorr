@@ -3,6 +3,7 @@ local character_type = require "world.character_type"
 local world = require "world.world"
 local M = {}
 world.data.characters = {}
+local describer = nil
 local function get_character_data(character_id)
     assert(type(character_id)=="number", "character_id must be a number.")
     return world.data.characters[character_id]
@@ -104,5 +105,14 @@ function M.set_direction(character_id, direction_id)
     assert(type(character_id)=="number", "character_id must be a number.")
     assert(type(direction_id)=="string", "direction_id must be a string.")
     get_character_data(character_id).direction_id = direction_id
+end
+function M.get_description(character_id)
+    if character_id == nil then return "" end
+    if describer == nil then return "" end
+    return describer(character_id)
+end
+function M.set_describer(new_describer)
+    assert(type(describer)=="function" or type(describer)=="nil", "describer must be a function or nil")
+    describer = new_describer
 end
 return M
