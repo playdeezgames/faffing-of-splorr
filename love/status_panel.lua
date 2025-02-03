@@ -86,7 +86,7 @@ function M.update()
     row = row + 1
 end
 
-function M.set_up_status_panel()
+function M.set_up()
     status_panel_canvas = love.graphics.newCanvas(STATUS_PANEL_COLUMNS * romfont.ROMFONT_CELL_WIDTH, STATUS_PANEL_ROWS * romfont.ROMFONT_CELL_HEIGHT)
     status_panel_canvas:setFilter("nearest","nearest")
     status_panel_cells = {}

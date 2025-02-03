@@ -1,3 +1,6 @@
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+  require("lldebugger").start()
+end
 local status_panel = require "status_panel"
 local character = require "world.character"
 local room      = require "world.room"
@@ -12,9 +15,6 @@ local grimoire       = require "game.grimoire"
 local romfont        = require "romfont"
 local world_initializer = require "world.initializers.world"
 local avatar = require "world.avatar"
-if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
-  require("lldebugger").start()
-end
 
 local GRID_CELL_WIDTH = 8
 local GRID_CELL_HEIGHT = 8
@@ -50,9 +50,9 @@ local function set_up_grid()
 end
 
 function love.load(arg)
-    romfont.set_up_romfont()
+    romfont.set_up()
     set_up_grid()
-    status_panel.set_up_status_panel()
+    status_panel.set_up()
     world_initializer.initialize()
 end
 

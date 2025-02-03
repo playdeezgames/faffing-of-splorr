@@ -7,7 +7,7 @@ M.ROMFONT_CELL_HEIGHT = 8
 M.romfont_tile_quads = {}
 M.romfont_tileset_image = nil
 
-function M.set_up_romfont()
+function M.set_up()
   M.romfont_tileset_image = love.graphics.newImage(ROMFONT_TILESET_FILENAME)
   local image_width = M.romfont_tileset_image:getWidth()
   local image_height = M.romfont_tileset_image:getHeight()
