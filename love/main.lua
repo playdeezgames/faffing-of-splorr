@@ -4,6 +4,7 @@ end
 local romfont        = require "romfont"
 local status_panel = require "status_panel"
 local message_panel = require "message_panel"
+local tool_tip = require "tool_tip"
 local grid = require "grid"
 local character = require "world.character"
 local verb_type      = require "world.verb_type"
@@ -16,17 +17,20 @@ function love.load(arg)
     grid.set_up()
     status_panel.set_up()
     message_panel.set_up()
+    tool_tip.set_up()
     world_initializer.initialize()
 end
 
 function love.update()
   status_panel.update()
+  tool_tip.update()
 end
 
 function love.draw()
   grid.draw()
   status_panel.draw()
   message_panel.draw()
+  tool_tip.draw()
 end
 
 function love.keypressed(key, scancode, isrepeat)
