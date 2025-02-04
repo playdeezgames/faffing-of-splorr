@@ -33,7 +33,7 @@ local function do_move(character_id, direction_id)
     if direction_id ~= old_direction_id then
         character.set_direction(character_id, direction_id)
         utility.send_message(colors.LIGHT_GRAY, "Facing "..direction_id..".")
-        return
+        return false
     end
     local room_cell_id = character.get_room_cell(character_id)
     local column, row = room_cell.get_position(room_cell_id)
@@ -45,7 +45,7 @@ local function do_move(character_id, direction_id)
         character.set_room_cell(character_id, next_room_cell_id)
         character.change_statistic(character_id, statistic_type.MOVES, 1)
     end
-    move_other_characters(room_id, character_id)
+    return true
 end
 local function do_energy_cost(character_id, cost)
     local energy = character.get_statistic(character_id, statistic_type.ENERGY)
@@ -152,6 +152,7 @@ end
 local function do_read_sign(character_id, feature_id)
     local text = feature.get_metadata(feature_id, metadata_type.TEXT)
     utility.send_message(colors.LIGHT_BLUE, text)
+    return true
 end
 
 local function do_feature_action(character_id, room_cell_id)
@@ -185,12 +186,12 @@ local function do_feature_action(character_id, room_cell_id)
 end
 local function do_action(character_id)
     local direction_id = character.get_direction(character_id)
-    if direction_id == nil then return end
+    if direction_id == nil then return false end
     local next_column, next_row = directions.get_next_position(direction_id, character.get_position(character_id))
     local room_id = character.get_room(character_id)
     local room_cell_id = room.get_room_cell(room_id, next_column, next_row)
-    if room_cell_id == nil then return end
-    if not do_feature_action(character_id, room_cell_id) then return end
+    if room_cell_id == nil then return false end
+    return do_feature_action(character_id, room_cell_id)
 end
 local function do_cancel(character_id)
     print("show me a game menu!")
@@ -198,14 +199,18 @@ end
 character_type.set_verb_doer(
     character_type.HERO,
     function(character_id, verb_type_id, context)
+        local move_others = false
         if verb_type_id == verb_type.MOVE then
-            do_move(character_id, context.direction_id)
+            move_others = do_move(character_id, context.direction_id)
         elseif verb_type_id == verb_type.ACTION then
-            do_action(character_id)
+            move_others = do_action(character_id)
         elseif verb_type_id == verb_type.CANCEL then
             do_cancel(character_id)
         else
             print(verb_type_id)
+        end
+        if move_others then
+            move_other_characters(character.get_room(character_id), character_id)
         end
     end)
 character_type.set_initializer(
