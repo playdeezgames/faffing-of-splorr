@@ -122,6 +122,7 @@ local function do_enter_portal(character_id)
         utility.send_message(colors.RED, "You cannot take wood through the portal.")
         return true
     end
+    utility.send_message(colors.LIGHT_BLUE, "You enter the portal, for more tree punching adventure!")
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
     room.change_statistic(room_id, statistic_type.TREE_COUNT, 1)
