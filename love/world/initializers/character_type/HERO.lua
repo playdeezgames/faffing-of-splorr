@@ -157,9 +157,7 @@ end
 
 local function do_feature_action(character_id, room_cell_id)
     local feature_id = room_cell.get_feature(room_cell_id)
-    if feature_id == nil then
-        return do_punch_air(character_id)
-    end
+    if feature_id == nil then return false end
 
     local feature_type_id = feature.get_feature_type(feature_id)
     if feature_type_id == feature_type.PINE then
@@ -184,6 +182,23 @@ local function do_feature_action(character_id, room_cell_id)
 
     return false
 end
+local function do_punch_druid(character_id, other_character_id)
+    if not do_energy_cost(character_id, 1) then return true end
+    utility.send_message(colors.YELLOW, "You punch the druid!")
+    character.change_statistic(other_character_id, statistic_type.STUN, 1)
+    return true
+end
+local function do_character_action(character_id, room_cell_id)
+    local other_character_id = room_cell.get_character(room_cell_id)
+    if other_character_id == nil then return false end
+
+    local other_character_type_id = character.get_character_type(other_character_id)
+    if other_character_type_id == character_type.DRUID then
+        return do_punch_druid(character_id, other_character_id)
+    end
+
+    return false
+end
 local function do_action(character_id)
     local direction_id = character.get_direction(character_id)
     if direction_id == nil then return false end
@@ -191,7 +206,9 @@ local function do_action(character_id)
     local room_id = character.get_room(character_id)
     local room_cell_id = room.get_room_cell(room_id, next_column, next_row)
     if room_cell_id == nil then return false end
-    return do_feature_action(character_id, room_cell_id)
+    if do_feature_action(character_id, room_cell_id) then return true end
+    if do_character_action(character_id, room_cell_id) then return true end
+    return do_punch_air(character_id)
 end
 local function do_cancel(character_id)
     print("show me a game menu!")

@@ -16,16 +16,20 @@ character_type.set_describer(
 local function do_step(character_id)
     local avatar_x, avatar_y = avatar.get_position()
     local x, y = character.get_position(character_id)
+    local stun = character.get_statistic(character_id, statistic_type.STUN)
     local candidates = {}
-    if x > avatar_x then
+    if x > avatar_x or stun>0 then
         table.insert(candidates, directions.WEST)
-    elseif x < avatar_x then
+    elseif x < avatar_x or stun>0 then
         table.insert(candidates, directions.EAST)
     end
-    if y > avatar_y then
+    if y > avatar_y or stun>0 then
         table.insert(candidates, directions.NORTH)
-    elseif y < avatar_y then
+    elseif y < avatar_y or stun>0 then
         table.insert(candidates, directions.SOUTH)
+    end
+    if stun > 0 then
+        character.change_statistic(character_id, statistic_type.STUN, -1)
     end
     local direction_id = candidates[math.random(1, #candidates)]
     x, y = directions.get_next_position(direction_id, x, y)
@@ -57,6 +61,7 @@ character_type.set_verb_doer(
     end)
 character_type.set_initializer(
     character_type.DRUID, 
-    function(character_id) 
+    function(character_id)
+        character.set_statistic(character_id, statistic_type.STUN, 0)
     end)
 return nil
