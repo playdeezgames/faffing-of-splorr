@@ -2,6 +2,7 @@ local room_cell = require "world.room_cell"
 local room_type = require "world.room_type"
 local world = require "world.world"
 local feature = require "world.feature"
+local character = require "world.character"
 local M = {}
 world.data.rooms = {}
 
@@ -100,11 +101,24 @@ function M.create_features(room_id, feature_type_id, feature_count)
     local columns, rows = M.get_size(room_id)
     while feature_count > 0 do
         local room_cell_id = M.get_room_cell(room_id, math.random(1, columns), math.random(1, rows))
-        if not room_cell.has_feature(room_cell_id) then
+        if room_cell.can_enter(room_cell_id) then
             local feature_id = feature.create(feature_type_id)
             room_cell.set_feature(room_cell_id, feature_id)
             table.insert(result, feature_id)
             feature_count = feature_count - 1
+        end
+    end
+    return result
+end
+function M.create_characters(room_id, character_type_id, character_count)
+    local result = {}
+    local columns, rows = M.get_size(room_id)
+    while character_count > 0 do
+        local room_cell_id = M.get_room_cell(room_id, math.random(1, columns), math.random(1, rows))
+        if room_cell.can_enter(room_cell_id) then
+            local character_id = character.create(character_type_id, room_cell_id)
+            table.insert(result, character_id)
+            character_count = character_count - 1
         end
     end
     return result

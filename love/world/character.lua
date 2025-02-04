@@ -107,7 +107,7 @@ function M.set_direction(character_id, direction_id)
 end
 function M.get_description(character_id)
     if character_id == nil then return "" end
-    local describer = character_type.get_describer(M.get_feature_type(character_id))
+    local describer = character_type.get_describer(M.get_character_type(character_id))
     if describer == nil then return "" end
     return describer(character_id)
 end

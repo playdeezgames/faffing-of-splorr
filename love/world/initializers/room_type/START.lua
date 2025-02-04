@@ -7,6 +7,7 @@ local room_cell_type = require "world.room_cell_type"
 local statistic_type = require "world.statistic_type"
 local character = require "world.character"
 local metadata_type = require "world.metadata_type"
+local character_type = require "world.character_type"
 
 local terrain_table = {
     [room_cell_type.BLANK] = 5,
@@ -56,5 +57,6 @@ room_type.set_initializer(
             local feature_id = room.create_features(room_id, feature_type.SIGN, 1)[1]
             feature.set_metadata(feature_id, metadata_type.TEXT, "Punch trees. Sell wood. Drink from the well. Go through the portal.")
         end
+        room.create_characters(room_id, character_type.DRUID, 1)
     end)
 return nil
