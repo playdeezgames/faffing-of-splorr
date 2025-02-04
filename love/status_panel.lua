@@ -76,6 +76,11 @@ function M.update()
     write_status_panel(1, row, colors.LIGHT_GRAY, "Energy: "..energy.."/"..maximum_energy)
     row = row + 1
 
+    local health = character.get_statistic(character_id, statistic_type.HEALTH)
+    local maximum_health = character.get_statistic(character_id, statistic_type.MAXIMUM_HEALTH)
+    write_status_panel(1, row, colors.LIGHT_GRAY, "Health: "..health.."/"..maximum_health)
+    row = row + 1
+
     local wood = character.get_statistic(character_id, statistic_type.WOOD)
     write_status_panel(1, row, colors.LIGHT_GRAY, "  Wood: "..wood)
     row = row + 1
