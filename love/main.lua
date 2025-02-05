@@ -1,6 +1,7 @@
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   require("lldebugger").start()
 end
+local json = require "json"
 local romfont        = require "romfont"
 local status_panel = require "status_panel"
 local message_panel = require "message_panel"
