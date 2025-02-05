@@ -5,6 +5,7 @@ M.WELL = "WELL"
 M.PORTAL = "PORTAL"
 M.WOOD_BUYER = "WOOD_BUYER"
 M.SIGN = "SIGN"
+M.STRENGTH_TRAINER = "STRENGTH_TRAINER"
 local data = {
     [M.PINE]={
         tile = grimoire.TILE_PINE
@@ -20,6 +21,9 @@ local data = {
     },
     [M.SIGN] = {
         tile = grimoire.TILE_SIGN
+    },
+    [M.STRENGTH_TRAINER] = {
+        tile = grimoire.TILE_STRENGTH_TRAINER
     }
 }
 local function get_descriptor(feature_type_id)

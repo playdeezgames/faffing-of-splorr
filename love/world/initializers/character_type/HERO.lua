@@ -162,6 +162,29 @@ local function do_read_sign(character_id, feature_id)
     return true
 end
 
+local function do_strength_training(character_id)
+    local strength = character.get_statistic(character_id, statistic_type.STRENGTH)
+    local advancement_point_cost = strength
+    local advancement_points = character.get_statistic(character_id, statistic_type.ADVANCEMENT_POINTS)
+    if advancement_point_cost > advancement_points  then
+        utility.send_message(colors.RED, "You need to have "..advancement_point_cost.." advancement points to train, but only have "..advancement_points..".")
+        return true
+    end
+    local jools_cost = strength * 10
+    local jools = character.get_statistic(character_id, statistic_type.JOOLS)
+    if jools_cost > jools then
+        utility.send_message(colors.RED, "You need to have "..jools_cost.." jools to train, but only have "..jools..".")
+        return true
+    end
+    utility.send_message(colors.YELLOW, "-"..jools_cost.." jools")
+    utility.send_message(colors.YELLOW, "-"..advancement_point_cost.." advancement points")
+    utility.send_message(colors.GREEN, "+1 strength")
+    character.change_statistic(character_id, statistic_type.JOOLS, -jools_cost)
+    character.change_statistic(character_id, statistic_type.ADVANCEMENT_POINTS, -advancement_point_cost)
+    character.change_statistic(character_id, statistic_type.STRENGTH, 1)
+    return true
+end
+
 local function do_feature_action(character_id, room_cell_id)
     local feature_id = room_cell.get_feature(room_cell_id)
     if feature_id == nil then return false end
@@ -185,6 +208,10 @@ local function do_feature_action(character_id, room_cell_id)
 
     if feature_type_id == feature_type.SIGN then
         return do_read_sign(character_id, feature_id)
+    end
+
+    if feature_type_id == feature_type.STRENGTH_TRAINER then
+        return do_strength_training(character_id)
     end
 
     return false
