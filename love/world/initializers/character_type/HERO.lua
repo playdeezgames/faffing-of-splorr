@@ -246,5 +246,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.MAXIMUM_HEALTH, 5)
         character.set_statistic(character_id, statistic_type.WOOD, 0)
         character.set_statistic(character_id, statistic_type.JOOLS, 0)
+        character.set_statistic(character_id, statistic_type.STRENGTH, 1)
     end)
 return nil

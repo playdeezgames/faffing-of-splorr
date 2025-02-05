@@ -50,44 +50,32 @@ local function write_status_panel(column, row, color, text)
     end
 end
 
+local function show_stat(row, character_id, statistic_type_id, text)
+  local value = character.get_statistic(character_id, statistic_type_id)
+  write_status_panel(1, row, colors.LIGHT_GRAY, text..value)
+  return row + 1
+end
+
+local function show_range_stat(row, character_id, statistic_type_id, maximum_statistic_type_id, text)
+  local value = character.get_statistic(character_id, statistic_type_id)
+  local maximum_value = character.get_statistic(character_id, maximum_statistic_type_id)
+  write_status_panel(1, row, colors.LIGHT_GRAY, text..value.."/"..maximum_value)
+  return row + 1
+end
+
 function M.update()
     local character_id = avatar.get_character()
     clear_status_panel()
     local row = 1
-    local xp = character.get_statistic(character_id, statistic_type.XP)
-    local xp_goal = character.get_statistic(character_id, statistic_type.XP_GOAL)
-    write_status_panel(1, row, colors.LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
-    row = row + 1
-
-    local xp_level = character.get_statistic(character_id, statistic_type.XP_LEVEL)
-    write_status_panel(1, row, colors.LIGHT_GRAY, " Level: "..xp_level)
-    row = row + 1
-
-    local moves = character.get_statistic(character_id, statistic_type.MOVES)
-    write_status_panel(1, row, colors.LIGHT_GRAY, " Moves: "..moves)
-    row = row + 1
-
-    local trees = character.get_statistic(character_id, statistic_type.TREES_MURDERED)
-    write_status_panel(1, row, colors.LIGHT_GRAY, " Trees: "..trees)
-    row = row + 1
-
-    local energy = character.get_statistic(character_id, statistic_type.ENERGY)
-    local maximum_energy = character.get_statistic(character_id, statistic_type.MAXIMUM_ENERGY)
-    write_status_panel(1, row, colors.LIGHT_GRAY, "Energy: "..energy.."/"..maximum_energy)
-    row = row + 1
-
-    local health = character.get_statistic(character_id, statistic_type.HEALTH)
-    local maximum_health = character.get_statistic(character_id, statistic_type.MAXIMUM_HEALTH)
-    write_status_panel(1, row, colors.LIGHT_GRAY, "Health: "..health.."/"..maximum_health)
-    row = row + 1
-
-    local wood = character.get_statistic(character_id, statistic_type.WOOD)
-    write_status_panel(1, row, colors.LIGHT_GRAY, "  Wood: "..wood)
-    row = row + 1
-
-    local jools = character.get_statistic(character_id, statistic_type.JOOLS)
-    write_status_panel(1, row, colors.LIGHT_GRAY, " Jools: "..jools)
-    row = row + 1
+    row = show_range_stat(row, character_id, statistic_type.XP, statistic_type.XP_GOAL, "      XP: ")
+    row = show_stat(row, character_id, statistic_type.XP_LEVEL, "   Level: ")
+    row = show_stat(row, character_id, statistic_type.MOVES, "   Moves: ")
+    row = show_stat(row, character_id, statistic_type.TREES_MURDERED, "   Trees: ")
+    row = show_range_stat(row, character_id, statistic_type.ENERGY, statistic_type.MAXIMUM_ENERGY, "  Energy: ")
+    row = show_range_stat(row, character_id, statistic_type.HEALTH, statistic_type.MAXIMUM_HEALTH, "  Health: ")
+    row = show_stat(row, character_id, statistic_type.WOOD, "    Wood: ")
+    row = show_stat(row, character_id, statistic_type.JOOLS, "   Jools: ")
+    row = show_stat(row, character_id, statistic_type.STRENGTH, "Strength: ")
 end
 
 function M.set_up()
