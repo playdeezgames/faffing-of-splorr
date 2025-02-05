@@ -76,6 +76,7 @@ function M.update()
     row = show_stat(row, character_id, statistic_type.WOOD, "    Wood: ")
     row = show_stat(row, character_id, statistic_type.JOOLS, "   Jools: ")
     row = show_stat(row, character_id, statistic_type.STRENGTH, "Strength: ")
+    row = show_stat(row, character_id, statistic_type.ADVANCEMENT_POINTS, "      AP: ")
 end
 
 function M.set_up()

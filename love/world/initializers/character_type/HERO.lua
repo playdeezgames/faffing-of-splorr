@@ -77,14 +77,25 @@ local function handle_level_done(character_id)
     end
     room.create_features(room_id, feature_type.PORTAL, 1)
 end
+local function add_xp(character_id, delta)
+    local xp = character.change_statistic(character_id, statistic_type.XP, delta)
+    local xp_goal = character.get_statistic(character_id, statistic_type.XP_GOAL)
+    if xp >= xp_goal then
+        character.change_statistic(character_id, statistic_type.XP, -xp_goal)
+        character.change_statistic(character_id, statistic_type.XP_GOAL, xp_goal)
+        local advancement_points = character.get_statistic(character_id, statistic_type.XP_LEVEL)
+        local xp_level = character.change_statistic(character_id, statistic_type.XP_LEVEL, 1)
+        utility.send_message(colors.GREEN, "You are now level "..xp_level.."!")
+        utility.send_message(colors.GREEN, "You gain "..advancement_points.." advancement points!")
+        advancement_points = character.change_statistic(character_id, statistic_type.ADVANCEMENT_POINTS, advancement_points)
+    end
+end
 local function do_punch_tree(character_id, feature_id, room_cell_id)
     if not do_energy_cost(character_id, 1) then return false end
----@diagnostic disable-next-line: param-type-mismatch
-    local xp_level = math.min(character.get_statistic(character_id, statistic_type.XP_LEVEL), feature.get_statistic(feature_id, statistic_type.HIT_POINTS))
-    local xp = character.change_statistic(character_id, statistic_type.XP, 1)
-    utility.send_message(colors.GREEN, "+"..xp_level.." Wood")
-    local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -xp_level)
-    character.change_statistic(character_id, statistic_type.WOOD, xp_level)
+    local damage = math.min(character.get_statistic(character_id, statistic_type.STRENGTH) or 0, feature.get_statistic(feature_id, statistic_type.HIT_POINTS))
+    utility.send_message(colors.GREEN, "+"..damage.." Wood")
+    local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -damage)
+    character.change_statistic(character_id, statistic_type.WOOD, damage)
     if hit_points <= 0 then
         utility.send_message(colors.GREEN, "You punched that tree into oblivion.")
         room_cell.set_feature(room_cell_id, nil)
@@ -94,14 +105,8 @@ local function do_punch_tree(character_id, feature_id, room_cell_id)
     else
         utility.send_message(colors.LIGHT_GRAY, "The tree has "..hit_points.." HP.")
     end
-
-    local xp_goal = character.get_statistic(character_id, statistic_type.XP_GOAL)
-    if xp >= xp_goal then
-        character.change_statistic(character_id, statistic_type.XP, -xp_goal)
-        character.change_statistic(character_id, statistic_type.XP_GOAL, xp_goal)
-        xp_level = character.change_statistic(character_id, statistic_type.XP_LEVEL, 1)
-        utility.send_message(colors.GREEN, "Yer punch is now level "..xp_level.."!")
-    end
+    
+    add_xp(character_id, 1)
     return true
 end
 local function do_drink_well(character_id)
@@ -247,5 +252,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.WOOD, 0)
         character.set_statistic(character_id, statistic_type.JOOLS, 0)
         character.set_statistic(character_id, statistic_type.STRENGTH, 1)
+        character.set_statistic(character_id, statistic_type.ADVANCEMENT_POINTS, 0)
     end)
 return nil
