@@ -55,7 +55,7 @@ function M.update()
     clear_status_panel()
     local row = 1
     local xp = character.get_statistic(character_id, statistic_type.XP)
-    local xp_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
+    local xp_goal = character.get_statistic(character_id, statistic_type.XP_GOAL)
     write_status_panel(1, row, colors.LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
     row = row + 1
 

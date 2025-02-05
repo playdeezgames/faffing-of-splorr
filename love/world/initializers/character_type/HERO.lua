@@ -95,10 +95,10 @@ local function do_punch_tree(character_id, feature_id, room_cell_id)
         utility.send_message(colors.LIGHT_GRAY, "The tree has "..hit_points.." HP.")
     end
 
-    local punch_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
-    if xp >= punch_goal then
-        character.change_statistic(character_id, statistic_type.XP, -punch_goal)
-        character.change_statistic(character_id, statistic_type.PUNCH_GOAL, punch_goal)
+    local xp_goal = character.get_statistic(character_id, statistic_type.XP_GOAL)
+    if xp >= xp_goal then
+        character.change_statistic(character_id, statistic_type.XP, -xp_goal)
+        character.change_statistic(character_id, statistic_type.XP_GOAL, xp_goal)
         punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
         utility.send_message(colors.GREEN, "Yer punch is now level "..punch_level.."!")
     end
@@ -236,7 +236,7 @@ character_type.set_initializer(
     character_type.HERO, 
     function(character_id) 
         character.set_statistic(character_id, statistic_type.XP, 0)
-        character.set_statistic(character_id, statistic_type.PUNCH_GOAL, 10)
+        character.set_statistic(character_id, statistic_type.XP_GOAL, 10)
         character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
         character.set_statistic(character_id, statistic_type.MOVES, 0)
         character.set_statistic(character_id, statistic_type.TREES_MURDERED, 0)
