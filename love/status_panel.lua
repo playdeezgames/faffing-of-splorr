@@ -54,7 +54,7 @@ function M.update()
     local character_id = avatar.get_character()
     clear_status_panel()
     local row = 1
-    local xp = character.get_statistic(character_id, statistic_type.PUNCHES_LANDED)
+    local xp = character.get_statistic(character_id, statistic_type.XP)
     local xp_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
     write_status_panel(1, row, colors.LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
     row = row + 1

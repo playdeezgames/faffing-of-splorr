@@ -81,7 +81,7 @@ local function do_punch_tree(character_id, feature_id, room_cell_id)
     if not do_energy_cost(character_id, 1) then return false end
 ---@diagnostic disable-next-line: param-type-mismatch
     local punch_level = math.min(character.get_statistic(character_id, statistic_type.PUNCH_LEVEL), feature.get_statistic(feature_id, statistic_type.HIT_POINTS))
-    local punches_landed = character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, 1)
+    local xp = character.change_statistic(character_id, statistic_type.XP, 1)
     utility.send_message(colors.GREEN, "+"..punch_level.." Wood")
     local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
     character.change_statistic(character_id, statistic_type.WOOD, punch_level)
@@ -96,8 +96,8 @@ local function do_punch_tree(character_id, feature_id, room_cell_id)
     end
 
     local punch_goal = character.get_statistic(character_id, statistic_type.PUNCH_GOAL)
-    if punches_landed >= punch_goal then
-        character.change_statistic(character_id, statistic_type.PUNCHES_LANDED, -punch_goal)
+    if xp >= punch_goal then
+        character.change_statistic(character_id, statistic_type.XP, -punch_goal)
         character.change_statistic(character_id, statistic_type.PUNCH_GOAL, punch_goal)
         punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
         utility.send_message(colors.GREEN, "Yer punch is now level "..punch_level.."!")
@@ -235,7 +235,7 @@ character_type.set_verb_doer(
 character_type.set_initializer(
     character_type.HERO, 
     function(character_id) 
-        character.set_statistic(character_id, statistic_type.PUNCHES_LANDED, 0)
+        character.set_statistic(character_id, statistic_type.XP, 0)
         character.set_statistic(character_id, statistic_type.PUNCH_GOAL, 10)
         character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
         character.set_statistic(character_id, statistic_type.MOVES, 0)
