@@ -130,9 +130,16 @@ local function do_enter_portal(character_id)
     end
     utility.send_message(colors.LIGHT_BLUE, "You enter the portal, for more tree punching adventure!")
     sfx.play(sfx.ENTER_PORTAL)
+    if character.get_statistic(character_id, statistic_type.SLAP_COUNT) == 0 then
+        utility.send_message(colors.GREEN, "You managed to avoid getting slapped. +1 advancement point.")
+        character.change_statistic(character_id, statistic_type.ADVANCEMENT_POINTS, 1)
+    end
+    character.set_statistic(character_id, statistic_type. SLAP_COUNT, 0)
+
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
     room.change_statistic(room_id, statistic_type.TREE_COUNT, 1)
+    room.change_statistic(room_id, statistic_type.DRUID_COUNT, 1)
     room.initialize(room_id)
     local room_cell_id, column, row
     repeat
@@ -280,5 +287,6 @@ character_type.set_initializer(
         character.set_statistic(character_id, statistic_type.JOOLS, 0)
         character.set_statistic(character_id, statistic_type.STRENGTH, 1)
         character.set_statistic(character_id, statistic_type.ADVANCEMENT_POINTS, 0)
+        character.set_statistic(character_id, statistic_type. SLAP_COUNT, 0)
     end)
 return nil

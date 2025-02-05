@@ -49,6 +49,7 @@ local function do_step(character_id)
     if other_character_type_id ~= character_type.HERO then return end
 
     utility.send_message(colors.RED, "The druid slaps you!")
+    character.change_statistic(other_character_id, statistic_type.SLAP_COUNT, 1)
     local energy = math.max(0, character.get_statistic(other_character_id, statistic_type.ENERGY) - 1)
     character.set_statistic(other_character_id, statistic_type.ENERGY, energy)
 end
