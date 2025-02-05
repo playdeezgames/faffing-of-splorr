@@ -10,6 +10,7 @@ local feature        = require "world.feature"
 local feature_type   = require "world.feature_type"
 local colors         = require "game.colors"
 local metadata_type  = require "world.metadata_type"
+local sfx            = require "game.sfx"
 
 local function move_other_characters(room_id, character_id)
     local other_character_ids = {}
@@ -123,6 +124,7 @@ local function do_enter_portal(character_id)
         return true
     end
     utility.send_message(colors.LIGHT_BLUE, "You enter the portal, for more tree punching adventure!")
+    sfx.play(sfx.ENTER_PORTAL)
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
     room.change_statistic(room_id, statistic_type.TREE_COUNT, 1)

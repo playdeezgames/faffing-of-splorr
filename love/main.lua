@@ -1,3 +1,4 @@
+local sfx = require "game.sfx"
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
   require("lldebugger").start()
 end
@@ -14,6 +15,7 @@ local world_initializer = require "world.initializers.world"
 local avatar = require "world.avatar"
 
 function love.load(arg)
+    sfx.load()
     romfont.set_up()
     grid.set_up()
     status_panel.set_up()
