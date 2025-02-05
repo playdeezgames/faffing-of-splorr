@@ -80,11 +80,11 @@ end
 local function do_punch_tree(character_id, feature_id, room_cell_id)
     if not do_energy_cost(character_id, 1) then return false end
 ---@diagnostic disable-next-line: param-type-mismatch
-    local punch_level = math.min(character.get_statistic(character_id, statistic_type.PUNCH_LEVEL), feature.get_statistic(feature_id, statistic_type.HIT_POINTS))
+    local xp_level = math.min(character.get_statistic(character_id, statistic_type.XP_LEVEL), feature.get_statistic(feature_id, statistic_type.HIT_POINTS))
     local xp = character.change_statistic(character_id, statistic_type.XP, 1)
-    utility.send_message(colors.GREEN, "+"..punch_level.." Wood")
-    local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -punch_level)
-    character.change_statistic(character_id, statistic_type.WOOD, punch_level)
+    utility.send_message(colors.GREEN, "+"..xp_level.." Wood")
+    local hit_points = feature.change_statistic(feature_id, statistic_type.HIT_POINTS, -xp_level)
+    character.change_statistic(character_id, statistic_type.WOOD, xp_level)
     if hit_points <= 0 then
         utility.send_message(colors.GREEN, "You punched that tree into oblivion.")
         room_cell.set_feature(room_cell_id, nil)
@@ -99,8 +99,8 @@ local function do_punch_tree(character_id, feature_id, room_cell_id)
     if xp >= xp_goal then
         character.change_statistic(character_id, statistic_type.XP, -xp_goal)
         character.change_statistic(character_id, statistic_type.XP_GOAL, xp_goal)
-        punch_level = character.change_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
-        utility.send_message(colors.GREEN, "Yer punch is now level "..punch_level.."!")
+        xp_level = character.change_statistic(character_id, statistic_type.XP_LEVEL, 1)
+        utility.send_message(colors.GREEN, "Yer punch is now level "..xp_level.."!")
     end
     return true
 end
@@ -237,7 +237,7 @@ character_type.set_initializer(
     function(character_id) 
         character.set_statistic(character_id, statistic_type.XP, 0)
         character.set_statistic(character_id, statistic_type.XP_GOAL, 10)
-        character.set_statistic(character_id, statistic_type.PUNCH_LEVEL, 1)
+        character.set_statistic(character_id, statistic_type.XP_LEVEL, 1)
         character.set_statistic(character_id, statistic_type.MOVES, 0)
         character.set_statistic(character_id, statistic_type.TREES_MURDERED, 0)
         character.set_statistic(character_id, statistic_type.ENERGY, 5)

@@ -59,7 +59,7 @@ function M.update()
     write_status_panel(1, row, colors.LIGHT_GRAY, "    XP: "..xp.."/"..xp_goal)
     row = row + 1
 
-    local xp_level = character.get_statistic(character_id, statistic_type.PUNCH_LEVEL)
+    local xp_level = character.get_statistic(character_id, statistic_type.XP_LEVEL)
     write_status_panel(1, row, colors.LIGHT_GRAY, " Level: "..xp_level)
     row = row + 1
 
