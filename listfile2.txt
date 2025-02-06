@@ -1,0 +1,9 @@
+./pub/faffing.exe
+./pub/license.txt
+./pub/love.dll
+./pub/lua51.dll
+./pub/mpg123.dll
+./pub/msvcp120.dll
+./pub/msvcr120.dll
+./pub/OpenAL32.dll
+./pub/SDL2.dll
