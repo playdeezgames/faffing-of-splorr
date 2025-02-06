@@ -139,7 +139,6 @@ local function do_enter_portal(character_id)
     local room_id = character.get_room(character_id)
     character.set_room_cell(character_id, nil)
     room.change_statistic(room_id, statistic_type.TREE_COUNT, 1)
-    room.change_statistic(room_id, statistic_type.DRUID_COUNT, 1)
     room.initialize(room_id)
     local room_cell_id, column, row
     repeat
